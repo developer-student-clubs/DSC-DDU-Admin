@@ -6,7 +6,6 @@
 import 'package:dsc_event_adder/add_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/login_page.dart';
 import 'package:dsc_event_adder/sign_in.dart';
 import 'package:dsc_event_adder/eventList.dart';
@@ -104,9 +103,11 @@ class HomeState extends State<Home> {
       );
     }
     return IconButton(
-        icon: Icon(
-          Icons.exit_to_app,
-          color: Colors.blue,
-        ));
+      icon: Icon(
+        Icons.exit_to_app,
+        color: Colors.blue,
+      ),
+      onPressed: () {},
+    );
   }
 }
