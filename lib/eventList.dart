@@ -35,7 +35,7 @@ class EventList extends StatelessWidget {
           title: Text(record.title),
           subtitle: Text(record.description),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            Event e = new Event.fromData(record.title, record.description);
+            Event e = new Event.fromData(record.id, record.title, record.description);
             return e;
           })),
         ),

@@ -3,17 +3,21 @@ import 'package:dsc_event_adder/event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AddEvent extends StatefulWidget
+class EditEvent extends StatefulWidget
 {
+  Event event;
+
+  EditEvent(Event event) {
+    this.event = event;
+  }
   @override
   State<StatefulWidget> createState() {
-    return AddEventState();
+    return EditEventState();
   }
 }
 
-class AddEventState extends State<AddEvent>
+class EditEventState extends State<EditEvent>
 {
-  Event event = new Event();
   final formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -31,25 +35,25 @@ class AddEventState extends State<AddEvent>
                     child: ListView(
                       children: <Widget>[
                         new TextFormField(
-                            decoration: new InputDecoration(
-                                hintText: 'Title here...',
-                                labelText: 'Title'
-                            ),
-                            onSaved: (String value) {
-                              debugPrint(value);
-                              this.event.title = value;
-                            }
+                          initialValue: widget.event.title,
+                          decoration: new InputDecoration(
+                              labelText: 'Title'
+                          ),
+                          onSaved: (String value) {
+                            debugPrint(value);
+                            widget.event.title = value;
+                          }
                         ),
                         new TextFormField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: new InputDecoration(
-                                hintText: 'description of the event here...',
-                                labelText: 'Description'
-                            ),
-                            onSaved: (String value) {
-                              this.event.description = value;
-                            }
+                          initialValue: widget.event.description,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: new InputDecoration(
+                              labelText: 'Description'
+                          ),
+                          onSaved: (String value) {
+                            widget.event.description = value;
+                          }
                         ),
                         new Padding(padding: EdgeInsets.all(15.0)),
                         new RaisedButton(
@@ -61,8 +65,13 @@ class AddEventState extends State<AddEvent>
                           splashColor: Colors.red,
                           onPressed: () {
                             formkey.currentState.save();
-                            Firestore.instance.collection('events').document()
-                                .setData({ 'title': event.title, 'description': event.description });
+                            final DocumentReference postRef = Firestore.instance.document('events/' + widget.event.id);
+                            Firestore.instance.runTransaction((Transaction tx) async {
+                              DocumentSnapshot postSnapshot = await tx.get(postRef);
+                              if (postSnapshot.exists) {
+                                await tx.update(postRef, <String, dynamic>{'title': widget.event.title, 'description': widget.event.description});
+                              }
+                            });
                             Navigator.of(context).pop(this);
                           },
                           child: Text(
