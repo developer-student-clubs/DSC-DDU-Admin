@@ -1,4 +1,4 @@
-# dsc_event_adder
+# event_adder
 
 A new Flutter application.
 
