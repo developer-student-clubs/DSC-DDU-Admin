@@ -17,7 +17,7 @@ void main() {
     MaterialApp(
       title: 'Event Manager',
       home: Home(),
-      debugShowCheckedModeBanner: false,
+//      debugShowCheckedModeBanner: false,
     ),
   );
 }
