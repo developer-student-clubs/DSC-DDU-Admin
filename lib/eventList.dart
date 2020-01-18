@@ -22,22 +22,47 @@ class EventList extends StatelessWidget {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final record = Event.fromSnapshot(data);
+    final event = Event.fromSnapshot(data);
     return Padding(
-      key: ValueKey(record.title),
+      key: ValueKey(event.eventName),
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(5.0),
-        ),
+        ),/*
+        child: Column(
+          children: <Widget>[
+            Image.network(
+              event.imageUrl,
+              height: 150,
+              fit: BoxFit.contain,
+            ),
+          ],
+        )*/
         child: ListTile(
-          title: Text(record.title),
-          subtitle: Text(record.description),
+          contentPadding: EdgeInsets.all(4),
+          title: Container(
+            height: 150.0,
+            child: Image.network(
+              event.imageUrl,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+            child: Text(
+              event.eventName,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            Event e = new Event.fromData(record.id, record.title, record.description);
+            Event e = new Event.fromData(event.id, event.branch, event.currentAvailable, event.date, event.description, event.eventName, event.extraInfo, event.imageUrl, event.postedOn, event.semester, event.timings, event.totalSeats, event.venue, event.what_to_bring);
             return e;
-          })),
+          }))
         ),
       ),
     );
