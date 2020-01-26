@@ -183,6 +183,8 @@ class AddEventState extends State<AddEvent>
                             },
                           ), //totalSeats
                           TextFormField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
                             initialValue: "N.A.",
                             decoration: new InputDecoration(
                                 hintText: 'extra information here..',
@@ -196,6 +198,8 @@ class AddEventState extends State<AddEvent>
                             },
                           ), //extraInfo
                           TextFormField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
                             initialValue: "N.A.",
                             decoration: new InputDecoration(
                                 hintText: 'things to bring here..',

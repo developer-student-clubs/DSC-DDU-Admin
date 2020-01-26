@@ -15,9 +15,13 @@ enum ConfirmAction { CANCEL, ACCEPT }
 void main() {
   runApp(
     MaterialApp(
-      title: 'Event Manager',
+      theme: ThemeData(
+        primaryColor: Colors.blue[300],
+        accentColor: Colors.red,
+        fontFamily: 'Montserrat'
+      ),
       home: Home(),
-//      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
     ),
   );
 }
@@ -33,10 +37,20 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     if(isSignedIn) {
       return Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
-          title: const Text('Event Manager'),
-          actions: <Widget>[_getSignOutIcon()],
+          title: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: const Text(
+              'Event Manager'
+            ),
+          ),
+          actions: <Widget>[Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: _getSignOutIcon(),
+          )],
           automaticallyImplyLeading: false,
+          elevation: 0,
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
@@ -48,7 +62,19 @@ class HomeState extends State<Home> {
             ));
           },
         ),
-        body: EventList(),
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                child: Container(
+                  color: Colors.white,
+                  child: EventList(),
+                ),
+              ),
+            ),
+          ],
+        ),
       );
     }
     else {
@@ -61,7 +87,6 @@ class HomeState extends State<Home> {
       return IconButton(
         icon: Icon(
           Icons.exit_to_app,
-          color: Colors.white,
         ),
         onPressed: () {
           if (!isSignedIn) {

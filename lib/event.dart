@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/edit_event.dart';
+import 'package:expandable/expandable.dart';
 
 enum ConfirmAction { CANCEL, ACCEPT }
 
@@ -88,154 +89,211 @@ class Event extends StatefulWidget {
   }
 }
 
+enum ActionButton { edit, delete }
+
 class EventState extends State<Event> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         title: Text(widget.eventName),
+        elevation: 0,
         actions: <Widget>[
-          _getDeleteButton()
+          PopupMenuButton(
+            onSelected: (ActionButton result) { 
+              setState(() {
+                if (result == ActionButton.edit) {
+                  _doEdit();
+                } else {
+                  _doDelete();
+                }
+              });
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<ActionButton>>[
+              const PopupMenuItem<ActionButton>(
+                value:ActionButton.edit,
+                child: Text('Edit'),
+              ),
+              const PopupMenuItem<ActionButton>(
+                value: ActionButton.delete,
+                child: Text('Delete'),
+              ),
+            ],
+          )
         ],
       ),
-      body: ListView(
+      body: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  height: 225.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: Image.network(
-                    widget.imageUrl,
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          widget.eventName,
-                          style: TextStyle(
-                            fontSize: 24.0,
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+              child: Container(
+                color: Colors.white,
+                child: ListView(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            height: 225.0,
+                            width: MediaQuery.of(context).size.width,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.all(Radius.circular(25)),
+                              child: Image.network(
+                                widget.imageUrl,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          widget.date,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          widget.description,
-                          style: TextStyle(
-                            color: Colors.grey,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Text(
+                                    widget.eventName,
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Text(
+                                    widget.date,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: ExpandablePanel(
+                                    header: Text("Description"),
+                                    collapsed: Text(
+                                      widget.description, 
+                                      softWrap: true, 
+                                      maxLines: 2, 
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(color: Colors.grey[500]),
+                                    ),
+                                    expanded: Text(widget.description, softWrap: true, ),
+                                    theme: ExpandableThemeData(headerAlignment: ExpandablePanelHeaderAlignment.center),
+                                  ),
+                                ),
+                                Container(
+                                  color: Colors.grey[300],
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 1,
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text(
+                                          "Seats",
+                                          style: TextStyle(
+                                              fontSize: 16.0
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 60,
+                                        ),
+                                        getPill(widget.currentAvailable.toString(), Colors.green[100]),
+                                        Text(' / ', style: TextStyle(fontSize: 20, color: Colors.grey),),
+                                        getPill(widget.totalSeats.toString(), Colors.blue[100]),
+                                      ],
+                                    )
+                                ),
+                                Container(
+                                  color: Colors.grey[300],
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 1,
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text(
+                                          "Timing",
+                                          style: TextStyle(
+                                              fontSize: 16.0
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 50,
+                                        ),
+                                        getPill(widget.timings, Colors.yellow[100]),
+                                      ],
+                                    )
+                                ),
+                                Container(
+                                  color: Colors.grey[300],
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 1,
+                                ),
+                                getTextLabelAndValue("Venue", widget.venue),
+                                getTextLabelAndValue("Branch", widget.branch),
+                                getTextLabelAndValue("Semester", widget.semester),
+                                ExpandablePanel(
+                                  header: Text("What to Bring"),
+                                  collapsed: Text(
+                                    widget.what_to_bring, 
+                                    softWrap: true, 
+                                    maxLines: 2, 
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Colors.grey[500]),
+                                  ),
+                                  expanded: Text(widget.what_to_bring, softWrap: true, ),
+                                  theme: ExpandableThemeData(headerAlignment: ExpandablePanelHeaderAlignment.center),
+                                ),
+                                ExpandablePanel(
+                                  header: Text("Extra"),
+                                  collapsed: Text(
+                                    widget.extraInfo, 
+                                    softWrap: true, 
+                                    maxLines: 2, 
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Colors.grey[500]),
+                                  ),
+                                  expanded: Text(widget.extraInfo, softWrap: true, ),
+                                  theme: ExpandableThemeData(headerAlignment: ExpandablePanelHeaderAlignment.center),
+                                ),
+                                SizedBox(height: 70,),
+                              ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                      Container(
-                        color: Colors.grey[300],
-                        width: MediaQuery.of(context).size.width,
-                        height: 1,
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                "Seats",
-                                style: TextStyle(
-                                    fontSize: 16.0
-                                ),
-                              ),
-                              SizedBox(
-                                width: 60,
-                              ),
-                              getPill(widget.currentAvailable.toString(), Colors.green[100]),
-                              Text(' / ', style: TextStyle(fontSize: 20, color: Colors.grey),),
-                              getPill(widget.totalSeats.toString(), Colors.blue[100]),
-                            ],
-                          )
-                      ),
-                      Container(
-                        color: Colors.grey[300],
-                        width: MediaQuery.of(context).size.width,
-                        height: 1,
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                "Timing",
-                                style: TextStyle(
-                                    fontSize: 16.0
-                                ),
-                              ),
-                              SizedBox(
-                                width: 50,
-                              ),
-                              getPill(widget.timings, Colors.yellow[100]),
-                            ],
-                          )
-                      ),
-                      Container(
-                        color: Colors.grey[300],
-                        width: MediaQuery.of(context).size.width,
-                        height: 1,
-                      ),
-                      getTextLabelAndValue("Venue", widget.venue),
-                      getTextLabelAndValue("Branch", widget.branch),
-                      getTextLabelAndValue("Semester", widget.semester),
-                      getTextLabelAndValue("What to Bring", widget.what_to_bring),
-                      getTextLabelAndValue("Extra", widget.extraInfo),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-            Icons.edit
-        ),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) {
-                return EditEvent(widget);
-              }
-          )).then((value) {
-            setState(() {
-
-            });
-          });
-        },
-      ),
+      floatingActionButton: _getFloatingButton(),
     );
   }
 
-  IconButton _getDeleteButton() {
-    return IconButton(
-      icon: Icon(Icons.delete),
-      onPressed: () {
-        showDialog<ConfirmAction>(
+  FloatingActionButton _getFloatingButton() {
+    if (widget.currentAvailable > 0) {
+      return FloatingActionButton(
+        child: Icon(
+          Icons.stop,
+        ),
+        onPressed: () {
+          showDialog<ConfirmAction>(
             context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Delete Event'),
-              content: const Text('Are you sure you want to delete this event?'),
+              title: Text('Stop Event'),
+              content: const Text('Are you sure you want to make this event stop?'),
               actions: <Widget>[
                 FlatButton(
                   child: const Text('No'),
@@ -246,14 +304,106 @@ class EventState extends State<Event> {
                 FlatButton(
                   child: const Text('Yes'),
                   onPressed: () {
-                    Firestore.instance.document('events/' + widget.id).delete();
-                    Navigator.of(context).pop(ConfirmAction.ACCEPT);
-                    Navigator.pop(context);
+                    final DocumentReference postRef = Firestore.instance.document('events/' + widget.id);
+                    Firestore.instance.runTransaction((Transaction tx) async {
+                      DocumentSnapshot postSnapshot = await tx.get(postRef);
+                      if (postSnapshot.exists) {
+                        await tx.update(postRef, <String, dynamic>{'currentAvailable': 0});
+                      }
+
+                      Navigator.of(context).pop(ConfirmAction.ACCEPT);
+
+                      setState(() {
+                        widget.currentAvailable = 0;
+                      });
+                    });
                   },
                 )
               ],
             );
-          },
+          });
+        },
+      );
+    }
+    else {
+      return FloatingActionButton(
+        child: Icon(
+          Icons.play_arrow
+        ),
+        onPressed: () {
+          showDialog<ConfirmAction>(
+            context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Live Event'),
+              content: const Text('Are you sure you want to make this event live?'),
+              actions: <Widget>[
+                FlatButton(
+                  child: const Text('No'),
+                  onPressed: () {
+                    Navigator.of(context).pop(ConfirmAction.CANCEL);
+                  },
+                ),
+                FlatButton(
+                  child: const Text('Yes'),
+                  onPressed: () {
+                    final DocumentReference postRef = Firestore.instance.document('events/' + widget.id);
+                    Firestore.instance.runTransaction((Transaction tx) async {
+                      DocumentSnapshot postSnapshot = await tx.get(postRef);
+                      if (postSnapshot.exists) {
+                        await tx.update(postRef, <String, dynamic>{'currentAvailable': widget.totalSeats});
+                      }
+
+                      Navigator.of(context).pop(ConfirmAction.ACCEPT);
+                      setState(() {
+                        widget.currentAvailable = widget.totalSeats;
+                      });
+                    });
+                  },
+                )
+              ],
+            );
+          });
+        },
+      );
+    }
+  }
+
+  void _doEdit() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return EditEvent(widget);
+      }
+    )).then((value) {
+      setState(() { });
+    });
+  }
+
+  void _doDelete() {
+    showDialog<ConfirmAction>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Event'),
+          content: const Text('Are you sure you want to delete this event?'),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop(ConfirmAction.CANCEL);
+              },
+            ),
+            FlatButton(
+              child: const Text('Yes'),
+              onPressed: () {
+                Firestore.instance.document('events/' + widget.id).delete();
+                Navigator.of(context).pop(ConfirmAction.ACCEPT);
+                Navigator.pop(context);
+              },
+            )
+          ],
         );
       },
     );
@@ -298,74 +448,3 @@ class EventState extends State<Event> {
     );
   }
 }
-/*
-class Event extends StatelessWidget{
-
-  String id;
-  String title;
-  //final String image;
-  String description;
-  DocumentReference reference;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(this.title),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                'Description:',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.0
-                ),
-              ),
-            ),
-            Text(
-              this.description,
-              style: TextStyle(
-                fontSize: 18.0,
-              ),
-            )
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.edit
-        ),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) {
-                return EditEvent(this);
-              }
-          )).then((value) {
-            Navigator.pop(context);
-          });
-        },
-      ),
-    );
-  }
-
-  Event();
-
-  Event.fromData(this.id, this.title, this.description);
-
-  Event.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['title'] != null),
-        assert(map['description'] != null),
-        title = map['title'],
-        description = map['description'],
-        id = reference.documentID;
-
-  Event.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
-}
- */
