@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/edit_event.dart';
 import 'package:expandable/expandable.dart';
-
+import  'package:dsc_event_adder/check_barcode.dart';
 enum ConfirmAction { CANCEL, ACCEPT }
 
 class Event extends StatefulWidget {
@@ -205,6 +205,12 @@ class EventState extends State<Event> {
                                         getPill(widget.currentAvailable.toString(), Colors.green[100]),
                                         Text(' / ', style: TextStyle(fontSize: 20, color: Colors.grey),),
                                         getPill(widget.totalSeats.toString(), Colors.blue[100]),
+
+                                        RaisedButton(onPressed: (){
+                                              _scan(widget.id).whenComplete(() => 
+                                              _showBasicAlert(context)
+                                         );
+                    }, child: Text("Scan")),
                                       ],
                                     )
                                 ),
