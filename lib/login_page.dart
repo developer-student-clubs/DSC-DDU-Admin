@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dsc_event_adder/sign_in.dart';
 import 'package:dsc_event_adder/main.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -37,14 +39,32 @@ class _LoginPageState extends State<LoginPage> {
       splashColor: Colors.grey,
       onPressed: () {
         signInWithGoogle().whenComplete(() {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (context) {
-                    return Home();
-                  }
-              ),
-              ModalRoute.withName('/')
-          );
+          Firestore.instance
+            .collection('users')
+            .document(email)
+            .get()
+            .then((DocumentSnapshot ds) {
+              if(!ds.exists) {
+                Fluttertoast.showToast(
+                  msg: "You don't have access to this app.",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIos: 3,
+                  backgroundColor: Colors.grey[200],
+                  textColor: Colors.black,
+                  fontSize: 16.0,
+                );
+              } else {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) {
+                        return Home();
+                      }
+                  ),
+                  ModalRoute.withName('/')
+                );
+              }
+            });
         });
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
