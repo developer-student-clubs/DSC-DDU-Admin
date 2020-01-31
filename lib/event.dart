@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/edit_event.dart';
 import 'package:expandable/expandable.dart';
+import 'package:dsc_event_adder/qr_scan.dart';
 
 enum ConfirmAction { CANCEL, ACCEPT }
 
@@ -154,21 +155,67 @@ class EventState extends State<Event> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Text(
-                                    widget.eventName,
-                                    style: TextStyle(
-                                      fontSize: 24.0,
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                                child: Text(
+                                                widget.eventName,
+                                                style: TextStyle(
+                                                  fontSize: 24.0,
+                                                ),
+                                              ),
                                     ),
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                      child: Text(
+                                        widget.date,
+                                      ),
+                                    ),]),
+                                    Column(
+
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+
+                                        children: <Widget>[
+                                        Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                        child: RaisedButton.icon(
+                                          color: Colors.blue[500],
+                                          icon: Icon(Icons.center_focus_weak), //`Icon` to display
+                                          label: Text('Scan'), //`Text` to display
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+
+                                          onPressed: ()async {
+
+//                                            scan(widget.id).whenComplete((){
+//                                              print("QR Scaned");
+//                                              Fluttertoast.showToast(
+//                                                  msg: "Done",
+//                                                  toastLength: Toast.LENGTH_SHORT,
+//                                                  gravity: ToastGravity.BOTTOM,
+//                                                  timeInSecForIos: 1,
+//                                                  backgroundColor: Colors.green,
+//                                                  textColor: Colors.white,
+//                                                  fontSize: 16.0
+//                                              );
+//                                            });
+                                            await scan(widget.id);
+
+
+                                          },
+                                        ),
+
+                                          ),
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Text(
-                                    widget.date,
-                                  ),
+                                  ]
                                 ),
+
                                 _getExpandable("Description", widget.description),
                                 _getLine(),
                                 Padding(
@@ -187,6 +234,9 @@ class EventState extends State<Event> {
                                         getPill(widget.currentAvailable.toString(), Colors.green[100]),
                                         Text(' / ', style: TextStyle(fontSize: 20, color: Colors.grey),),
                                         getPill(widget.totalSeats.toString(), Colors.blue[100]),
+
+
+
                                       ],
                                     )
                                 ),
@@ -432,4 +482,8 @@ class EventState extends State<Event> {
       height: 1,
     );
   }
+
+
+
+
 }

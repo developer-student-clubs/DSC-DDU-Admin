@@ -19,6 +19,7 @@ dependencies:
   datetime_picker_formfield: ^1.0.0
   expandable: ^4.1.2
   fluttertoast: ^3.1.3
+  qrscan: ^0.2.17
 
 dev_dependencies:
   flutter_test:
