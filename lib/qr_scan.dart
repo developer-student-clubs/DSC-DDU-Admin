@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 Future<void> scan(String id) async {
   String barcode;
-  final random = Random();
 
 bool success;
 //var participantsRef=Firestore.instance.collection("events").document(id).collection("participants");
@@ -13,15 +12,23 @@ bool success;
 while(true){
   barcode = await scanner.scan();
 
-  success=random.nextBool();
+  success=false;
   // TODO: Add Query to Fetch the participants and update the Attendance
 
 
 
-//  participantsRef.where('qrCodeString'==barcode).getDocuments().then((QuerySnapshot snapshot) {
-//    snapshot.documents.forEach((f) => print('${f.data}}'));
+// participantsRef.where('qrCodeString'==barcode).getDocuments().then((QuerySnapshot snapshot) {
+//    snapshot.documents.forEach((f) => {
+//    });
 //  });
-
+  await Firestore.instance.collection("events").document(id).collection("participants")
+      .where('qrCodeString',isEqualTo: barcode).limit(1)
+      .getDocuments().then((data){
+    if (data.documents.length > 0){
+        data.documents[0].data['attended']=true;
+        success=true;
+      }
+    });
 
 
 

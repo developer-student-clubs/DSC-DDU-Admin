@@ -158,32 +158,34 @@ class EventState extends State<Event> {
                                 Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                    Expanded(
+                                      child:Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
 
-                                            children: <Widget>[
-                                              Padding(
+                                          children: <Widget>[
+                                            Container(
                                                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                                                 child: Text(
-                                                widget.eventName,
-                                                style: TextStyle(
-                                                  fontSize: 24.0,
-                                                ),
+                                                  widget.eventName,
+                                                  style: TextStyle(
+                                                    fontSize: 24.0,
+                                                  ),
                                               ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                      child: Text(
-                                        widget.date,
+                                            ),
+                                            Text(
+                                              widget.date,
+                                            ),
+
+                                          ]
                                       ),
-                                    ),]),
+                                    ),
                                     Column(
 
                                         crossAxisAlignment: CrossAxisAlignment.end,
 
                                         children: <Widget>[
                                         Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                        padding: const EdgeInsets.symmetric(vertical: 0.0),
                                         child: RaisedButton.icon(
                                           color: Colors.blue[500],
                                           icon: Icon(Icons.center_focus_weak), //`Icon` to display
