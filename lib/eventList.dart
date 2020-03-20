@@ -33,7 +33,7 @@ class EventList extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: GestureDetector(
         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          Event e = new Event.fromData(event.id, event.branch, event.currentAvailable, event.date, event.description, event.eventName, event.extraInfo, event.imageUrl, event.postedOn, event.semester, event.timings, event.totalSeats, event.venue, event.what_to_bring);
+          Event e = new Event.fromData(event.id, event.branch, event.currentAvailable, event.date, event.description, event.eventName, event.extraInfo, event.imageUrl, event.postedOn, event.semester, event.timings, event.totalSeats, event.venue, event.what_to_bring,event.totalSeats-event.currentAvailable);
           return e;
         })),
         child: Card(

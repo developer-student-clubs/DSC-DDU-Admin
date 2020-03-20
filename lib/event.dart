@@ -1,9 +1,10 @@
+import 'package:dsc_event_adder/attendance.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/edit_event.dart';
+import 'package:dsc_event_adder/shared.dart';
 import 'package:expandable/expandable.dart';
-import 'package:dsc_event_adder/qr_scan.dart';
 
 enum ConfirmAction { CANCEL, ACCEPT }
 
@@ -23,6 +24,7 @@ class Event extends StatefulWidget {
   int totalSeats;
   String venue;
   String what_to_bring;
+  int registered;
   DocumentReference reference;
 
   Event();
@@ -40,7 +42,8 @@ class Event extends StatefulWidget {
       this.timings,
       this.totalSeats,
       this.venue,
-      this.what_to_bring);
+      this.what_to_bring,
+      this.registered);
 
   Event.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['branch'] != null),
@@ -71,6 +74,7 @@ class Event extends StatefulWidget {
         what_to_bring = map['what_to_bring'],
         id = reference.documentID;
 
+
   Event.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
@@ -84,8 +88,21 @@ class Event extends StatefulWidget {
     return fullString ?? toStringShort();
   }
 
+
+//  Future<int> getAttedeeCount() async{
+//    int c;
+//    await Firestore.instance.collection("events").document(id).collection("participants")
+//        .where('attended',isEqualTo:true).getDocuments().then((data){
+//          remaining= data.documents.length;
+//      c= data.documents.length;
+//    });
+//    return c;
+//  }
+
+
   @override
-  State<StatefulWidget> createState() {
+  State<StatefulWidget> createState(){
+
     return EventState();
   }
 }
@@ -103,7 +120,7 @@ class EventState extends State<Event> {
         elevation: 0,
         actions: <Widget>[
           PopupMenuButton(
-            onSelected: (ActionButton result) { 
+            onSelected: (ActionButton result) {
               setState(() {
                 if (result == ActionButton.edit) {
                   _doEdit();
@@ -185,14 +202,24 @@ class EventState extends State<Event> {
 
                                         children: <Widget>[
                                         Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 0.0),
+                                        padding: const EdgeInsets.symmetric(vertical: 8.0),
                                         child: RaisedButton.icon(
-                                          color: Colors.blue[500],
-                                          icon: Icon(Icons.center_focus_weak), //`Icon` to display
-                                          label: Text('Scan'), //`Text` to display
+                                          color: Colors.red,
+                                          icon: Icon(Icons.list,color: Colors.white,), //`Icon` to display
+                                          label: Text('Attendance',style: TextStyle(color: Colors.white),), //`Text` to display
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                                            onPressed:(){
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return  Attendance(widget.id,widget.eventName,widget.registered);
+                                                      }
+                                                  ),
 
-                                          onPressed: ()async {
+                                              );
+
+                                            }
+//                                          onPressed: ()async {
 
 //                                            scan(widget.id).whenComplete((){
 //                                              print("QR Scaned");
@@ -206,10 +233,8 @@ class EventState extends State<Event> {
 //                                                  fontSize: 16.0
 //                                              );
 //                                            });
-                                            await scan(widget.id);
-
-
-                                          },
+//                                            await scan(widget.id);
+//                                          },
                                         ),
 
                                           ),
@@ -220,6 +245,29 @@ class EventState extends State<Event> {
 
                                 _getExpandable("Description", widget.description),
                                 _getLine(),
+//                                Padding(
+//                                    padding: const EdgeInsets.symmetric(vertical: 16),
+//                                    child: Row(
+//                                      children: <Widget>[
+//                                        Text(
+//                                          "Attedance",
+//                                          style: TextStyle(
+//                                              fontSize: 16.0
+//                                          ),
+//                                        ),
+//                                        SizedBox(
+//                                          width: 65,
+//                                        ),
+//                                       // getPill(widget.getAttedeeCount().toString(), Colors.green[100]),
+//
+//                                        Text(' / ', style: TextStyle(fontSize: 20, color: Colors.grey),),
+//                                        getPill(widget.registered.toString(), Colors.blue[100]),
+//
+//
+//
+//                                      ],
+//                                    )
+//                                ),_getLine(),
                                 Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 16),
                                     child: Row(
@@ -420,6 +468,7 @@ class EventState extends State<Event> {
     );
   }
 
+
   Widget getPill(String text, Color color){
     return Container(
       decoration: BoxDecoration(
@@ -451,7 +500,7 @@ class EventState extends State<Event> {
           Text(
             value,
             style: TextStyle(
-              fontSize: 16
+                fontSize: 16
             ),
           )
         ],
@@ -465,9 +514,9 @@ class EventState extends State<Event> {
       child: ExpandablePanel(
         header: Text(title),
         collapsed: Text(
-          text, 
-          softWrap: true, 
-          maxLines: 2, 
+          text,
+          softWrap: true,
+          maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.grey[500]),
         ),
@@ -480,12 +529,11 @@ class EventState extends State<Event> {
   Widget _getLine() {
     return Container(
       color: Colors.grey[300],
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       height: 1,
     );
   }
-
-
-
-
 }
