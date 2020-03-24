@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dsc_event_adder/sign_in.dart';
 import 'package:dsc_event_adder/main.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,57 +13,61 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image(
-                image: AssetImage('assets/gd_dsc_lockup_vertical_color.png'),
-                height: 90.0,
-              ),
-              SizedBox(height: 90),
-              _signInButton(),
-            ],
-          ),
+      body: MainPage(),
+    );
+  }
+}
+
+class MainPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(
+              image: AssetImage('assets/gd_dsc_lockup_vertical_color.png'),
+              height: 90.0,
+            ),
+            SizedBox(height: 90),
+            _signInButton(context),
+          ],
         ),
       ),
     );
   }
 
-  Widget _signInButton() {
+  Widget _signInButton(BuildContext context) {
     return OutlineButton(
       splashColor: Colors.grey,
       onPressed: () {
         signInWithGoogle().whenComplete(() {
-          Firestore.instance
-            .collection('users')
-            .document(email)
-            .get()
-            .then((DocumentSnapshot ds) {
-              if(!ds.exists) {
-                Fluttertoast.showToast(
-                  msg: "You don't have access to this app.",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIos: 3,
-                  backgroundColor: Colors.grey[200],
-                  textColor: Colors.black,
-                  fontSize: 16.0,
-                );
-              } else {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) {
-                        return Home();
-                      }
+          Firestore.instance.collection('extra_access_users')
+            .where('email_id', isEqualTo:email)
+            .getDocuments().then((QuerySnapshot qs){
+
+            if (qs.documents.length == 0){
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "You don't have access to this app.",
                   ),
-                  ModalRoute.withName('/')
-                );
-              }
-            });
+                )
+              );
+            } else {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return Home();
+                  }
+                ),
+                ModalRoute.withName('/')
+              );
+            }
+          });
         });
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),

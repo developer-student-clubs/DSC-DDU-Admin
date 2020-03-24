@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/edit_event.dart';
-import 'package:dsc_event_adder/shared.dart';
+//import 'package:dsc_event_adder/shared.dart';
 import 'package:expandable/expandable.dart';
 
 enum ConfirmAction { CANCEL, ACCEPT }
