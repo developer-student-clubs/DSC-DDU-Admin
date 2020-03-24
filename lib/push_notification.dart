@@ -96,6 +96,8 @@ class AddNotificationState extends State<AddNotification>
                             this.imageUrl = value;
                           },
                         ),
+                        SizedBox(height: 10,),
+                        Text('or',style: TextStyle(fontSize: 20,color: Colors.grey),),
                         Card(
                           child: (_image != null) ? Image.file(
                             _image,
