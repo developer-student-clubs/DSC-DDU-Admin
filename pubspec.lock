@@ -135,7 +135,7 @@ packages:
     source: hosted
     version: "0.1.1+1"
   firebase_core:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
@@ -155,6 +155,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1+1"
+  firebase_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_messaging
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.13"
   firebase_storage:
     dependency: "direct main"
     description:
@@ -206,12 +213,12 @@ packages:
     source: hosted
     version: "0.8.2+1"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.0+2"
+    version: "0.12.0+4"
   http_parser:
     dependency: transitive
     description:

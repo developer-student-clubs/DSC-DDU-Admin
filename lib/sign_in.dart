@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -14,7 +15,7 @@ Future<String> signInWithGoogle() async {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
   final GoogleSignInAuthentication googleSignInAuthentication =
   await googleSignInAccount.authentication;
-
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   final AuthCredential credential = GoogleAuthProvider.getCredential(
     accessToken: googleSignInAuthentication.accessToken,
     idToken: googleSignInAuthentication.idToken,
@@ -41,7 +42,7 @@ Future<String> signInWithGoogle() async {
   assert(user.uid == currentUser.uid);
 
   isSignedIn = true;
-
+  firebaseMessaging.subscribeToTopic('notifications');
   return 'signInWithGoogle succeeded: $user';
 }
 

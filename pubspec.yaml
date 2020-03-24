@@ -21,7 +21,11 @@ dependencies:
   qrscan: ^0.2.17
   path_provider: ^1.6.5
   csv: ^4.0.3
+  firebase_messaging: ^6.0.13
+  http: ^0.12.0+4
+  firebase_core: ^0.4.4+3
 
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
