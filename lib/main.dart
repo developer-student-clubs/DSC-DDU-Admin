@@ -1,11 +1,3 @@
-// Copyright 2019 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-// ignore_for_file: public_member_api_docs
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:dsc_event_adder/add_event.dart';
 import 'package:dsc_event_adder/push_notification.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +6,7 @@ import 'package:dsc_event_adder/login_page.dart';
 import 'package:dsc_event_adder/sign_in.dart';
 import 'package:dsc_event_adder/eventList.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:http/http.dart' as http;
+
 enum ConfirmAction { CANCEL, ACCEPT }
 
 void main() {
@@ -36,7 +28,8 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  final String serverToken ='AAAAChH_RPM:APA91bGn9HQgQEDYB1idXmULCldISArID8OtFNu8hGEVQUB0ApBu3SD507eKHSACgkiXx5glhLK-55Q8UJggqAceMM2VnRmgT6Jk9xt05yVKXzte2FEOtalTCR0eRpMOjSjsIYu3-Tr7';
+  final String serverToken =
+      'AAAAChH_RPM:APA91bGn9HQgQEDYB1idXmULCldISArID8OtFNu8hGEVQUB0ApBu3SD507eKHSACgkiXx5glhLK-55Q8UJggqAceMM2VnRmgT6Jk9xt05yVKXzte2FEOtalTCR0eRpMOjSjsIYu3-Tr7';
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   @override
   void initState() {
@@ -69,19 +62,16 @@ class HomeState extends State<Home> {
         // TODO optional
       },
     );
-    firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(
-        sound: true,
-        alert: true,
-        badge: true,
-      )
-    );
-    firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings setting){
+    firebaseMessaging
+        .requestNotificationPermissions(const IosNotificationSettings(
+      sound: true,
+      alert: true,
+      badge: true,
+    ));
+    firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings setting) {
       print("Ios Setting Regiatered");
     });
-
-
-
   }
 
   @override
@@ -107,14 +97,21 @@ class HomeState extends State<Home> {
           automaticallyImplyLeading: false,
           elevation: 0,
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return AddEvent();
-            }));
-          },
-        ),
+        floatingActionButton: new Builder(builder: (BuildContext context2) {
+          return new FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                if (canEdit) {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return AddEvent();
+                  }));
+                } else {
+                  Scaffold.of(context2).showSnackBar(SnackBar(
+                      content: Text("You don't have access to add events")));
+                }
+              });
+        }),
         body: Column(
           children: <Widget>[
             Expanded(
@@ -187,63 +184,24 @@ class HomeState extends State<Home> {
     );
   }
 
-  IconButton _getSendNotificationBtn() {
-    return IconButton(
-      icon: Icon(
-        Icons.notifications,
-      ),
-      onPressed: () async{
-
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return AddNotification();
-        }));
-        print("Send Notifications");
-//       await sendAndRetrieveMessage().then((value){
-//         print("done hurrah!");
-//       });
-      },
-    );
+  Builder _getSendNotificationBtn() {
+    return new Builder(builder: (BuildContext context) {
+      return IconButton(
+        icon: Icon(
+          Icons.notifications,
+        ),
+        onPressed: () async {
+          if (canNotify) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return AddNotification();
+            }));
+            print("Send Notifications");
+          } else {
+            Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text("You don't have access to send Notifications.")));
+          }
+        },
+      );
+    });
   }
-
-
-//  Future<Map<String, dynamic>> sendAndRetrieveMessage() async {
-//    await firebaseMessaging.requestNotificationPermissions(
-//      const IosNotificationSettings(
-//          sound: true, badge: true, alert: true, provisional: false),
-//    );
-//
-//    await http.post(
-//      'https://fcm.googleapis.com/fcm/send',
-//      headers: <String, String>{
-//        'Content-Type': 'application/json',
-//        'Authorization': 'key=$serverToken',
-//      },
-//      body: jsonEncode(
-//        <String, dynamic>{
-//          'notification': <String, dynamic>{
-//            'body': 'this is a body',
-//            'title': 'this is a title'
-//          },
-//          'priority': 'high',
-//          'data': <String, dynamic>{
-//            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-//            'id': ' ',
-//            'status': 'done'
-//          },
-//          'to': await firebaseMessaging.getToken(),
-//        },
-//      ),
-//    );
-//
-//    final Completer<Map<String, dynamic>> completer =
-//    Completer<Map<String, dynamic>>();
-//
-//    firebaseMessaging.configure(
-//      onMessage: (Map<String, dynamic> message) async {
-//        completer.complete(message);
-//      },
-//    );
-//    print("done no eroor hurrah!");
-//    return completer.future;
-//  }
 }

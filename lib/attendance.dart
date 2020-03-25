@@ -2,67 +2,74 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/qr_scan.dart';
 import 'package:dsc_event_adder/attendeeList.dart';
+import 'package:dsc_event_adder/login_page.dart';
 
 class Attendance extends StatelessWidget {
-
   String id;
   int registered;
   String name;
 
-  Attendance(id,name,registered){
-    this.id=id;
-    this.registered=registered;
-    this.name=name;
+  Attendance(id, name, registered) {
+    this.id = id;
+    this.registered = registered;
+    this.name = name;
   }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("events").document(id).collection("participants")
-          .where('attended',isEqualTo:true).snapshots(),
+      stream: Firestore.instance
+          .collection("events")
+          .document(id)
+          .collection("participants")
+          .where('attended', isEqualTo: true)
+          .snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return Scaffold(
-          backgroundColor: Theme.of(context).primaryColor,
-          appBar: AppBar(
-            title: Text(name),
-            elevation: 0,
-          ),
-          body: ClipRRect(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-            child: Container(
-              color: Colors.white,
-              child: Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: Colors.cyan[50],
-                ),
+        if (!snapshot.hasData)
+          return Scaffold(
+              backgroundColor: Theme.of(context).primaryColor,
+              appBar: AppBar(
+                title: Text(name),
+                elevation: 0,
               ),
-            ),
-          )
-        );
+              body: ClipRRect(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30)),
+                child: Container(
+                  color: Colors.white,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.cyan[50],
+                    ),
+                  ),
+                ),
+              ));
 //        registered=Firestore.instance.collection("events").document(id).collection("participants").snapshots().length;
-        return _buildPage(context,id,registered,snapshot.data.documents.length,name);
+        return _buildPage(
+            context, id, registered, snapshot.data.documents.length, name);
       },
     );
   }
 }
 
-Widget _buildPage(BuildContext context,id,registered,remaining,name) {
+Widget _buildPage(BuildContext context, id, registered, remaining, name) {
   return Scaffold(
     backgroundColor: Theme.of(context).primaryColor,
     appBar: AppBar(
       title: Text(name),
       elevation: 0,
     ),
-    body: MainPage(id,registered,remaining,name),
+    body: MainPage(id, registered, remaining, name),
   );
 }
 
-class MainPage extends StatelessWidget{
+class MainPage extends StatelessWidget {
   String id;
   int registered;
   int remaining;
   String name;
 
-  MainPage(id,registered,remaining,name){
+  MainPage(id, registered, remaining, name) {
     this.id = id;
     this.registered = registered;
     this.remaining = remaining;
@@ -71,7 +78,8 @@ class MainPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       child: Container(
         color: Colors.white,
         child: Column(
@@ -93,7 +101,7 @@ class MainPage extends StatelessWidget{
                       Text(
                         remaining.toString(),
                         style: TextStyle(
-                            fontSize: 24,
+                          fontSize: 24,
                         ),
                       )
                     ],
@@ -110,7 +118,7 @@ class MainPage extends StatelessWidget{
                       Text(
                         registered.toString(),
                         style: TextStyle(
-                            fontSize: 24,
+                          fontSize: 24,
                         ),
                       )
                     ],
@@ -129,16 +137,17 @@ class MainPage extends StatelessWidget{
               ), //`Icon` to display
               label: Text(
                 'Scan QR Code',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20
-                ),
+                style: TextStyle(color: Colors.white, fontSize: 20),
               ), //`Text` to display
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40)
-              ),
+                  borderRadius: BorderRadius.circular(40)),
               onPressed: () async {
-                await scan(id, context);
+                if (canScan) {
+                  await scan(id, context);
+                } else {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("You don't have access to scan.")));
+                }
               },
             ),
             SizedBox(
@@ -152,16 +161,17 @@ class MainPage extends StatelessWidget{
               ), //`Icon` to display
               label: Text(
                 'Get List',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20
-                ),
+                style: TextStyle(color: Colors.white, fontSize: 20),
               ), //`Text` to display
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40)
-              ),
+                  borderRadius: BorderRadius.circular(40)),
               onPressed: () {
-                getAttendeeList(context, id, name);
+                if (canGetList) {
+                  getAttendeeList(context, id, name);
+                } else {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("You don't have access to get list.")));
+                }
               },
             ),
           ],
@@ -169,5 +179,4 @@ class MainPage extends StatelessWidget{
       ),
     );
   }
-
 }

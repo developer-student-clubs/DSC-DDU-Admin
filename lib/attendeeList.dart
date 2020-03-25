@@ -8,12 +8,20 @@ import 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
 
 void getAttendeeList(BuildContext context, String id, String name) {
+  Scaffold.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        "Creating file..."
+      ),
+    )
+  );
   Firestore.instance.collection("events").document(id).collection("participants")
         .getDocuments().then((data) async {
     List<DocumentSnapshot> ds = data.documents;
     List<List<dynamic>> rows = List<List<dynamic>>();
     rows.add(["First Name","Last Name","College ID","Branch","Semester","Email ID","Phone Number","Attended"]);
     String email;
+    print(ds.length);
     for (int i = 0; i <ds.length; i++) {
       List<dynamic> row = List();
       row.add(ds[i].data["firstName"]);
