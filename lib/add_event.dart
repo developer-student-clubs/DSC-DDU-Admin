@@ -242,10 +242,10 @@ class AddEventState extends State<AddEvent>
                             child: (_image != null) ? Image.file(
                               _image,
                               fit: BoxFit.fill,
-                            ):Image.network(
-                              "https://winaero.com/blog/wp-content/uploads/2019/11/Photos-new-icon.png",
-                              fit: BoxFit.fill,
-                            ),
+                            ):Image.asset(
+                            'assets/new_image.png',
+                            fit: BoxFit.fill,
+                          ),
                           ),
                           RaisedButton(
                             color: Colors.blue,

@@ -28,9 +28,9 @@ class MainPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image(
-              image: AssetImage('assets/gd_dsc_lockup_vertical_color.png'),
-              height: 90.0,
+            Image.asset(
+              'assets/main_logo.png',
+              fit: BoxFit.fitWidth,
             ),
             SizedBox(height: 90),
             _signInButton(context),
