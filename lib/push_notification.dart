@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 
 class AddNotification extends StatefulWidget
@@ -134,9 +133,6 @@ class AddNotificationState extends State<AddNotification>
                           padding: EdgeInsets.all(8.0),
                           splashColor: Colors.red,
                           onPressed: () {
-                             ProgressDialog pr= new ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
-                             pr.style(message: "Please Wait....");
-                             pr.show();
                             if(formkey.currentState.validate()) {
                               formkey.currentState.save();
                               if(_image != null) {
@@ -169,7 +165,6 @@ class AddNotificationState extends State<AddNotification>
                             } else {
                               _autoValidate = true;
                             }
-                            pr.dismiss();
                           },
                           child: Text(
                             "Submit",

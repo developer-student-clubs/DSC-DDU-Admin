@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 class AddEvent extends StatefulWidget {
   @override
@@ -284,16 +283,12 @@ class AddEventState extends State<AddEvent> {
                           padding: EdgeInsets.all(8.0),
                           splashColor: Colors.red,
                           onPressed: () {
-                             ProgressDialog pr= new ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);
-                             pr.style(message: "Please Wait....");
-                             pr.show();
                             if (formkey.currentState.validate()) {
                               formkey.currentState.save();
                               if (_image != null) {
                                 event.timings = (_endTime == "onwards")
                                     ? _startTime + " " + _endTime
                                     : _startTime + " to " + _endTime;
-                                    
                                 uploadPic(context).then((value) {
                                   if (formkey.currentState.validate()) {
                                     Firestore.instance
@@ -314,7 +309,6 @@ class AddEventState extends State<AddEvent> {
                                       'venue': event.venue,
                                       'what_to_bring': event.what_to_bring,
                                     });
-                                    pr.dismiss();
                                     Navigator.of(context).pop(this);
                                   }
                                 });
@@ -327,11 +321,7 @@ class AddEventState extends State<AddEvent> {
                               }
                             } else {
                               _autoValidate = true;
-                              
                             }
-                            print("doidjsekfso");
-                            pr.hide();
-                          
                           },
                           child: Text(
                             "Submit",
