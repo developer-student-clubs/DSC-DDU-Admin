@@ -137,7 +137,9 @@ class EventState extends State<Event> {
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
               child: Container(
                 color: Colors.white,
                 child: ListView(
@@ -164,68 +166,54 @@ class EventState extends State<Event> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Text(
+                                    widget.eventName,
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                    ),
+                                  ),
+                                ),
                                 Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 8.0),
-                                                child: Text(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          widget.date,
+                                        ),
+                                        SizedBox(height: 30.0),
+                                      ],
+                                    ),
+                                    RaisedButton.icon(
+                                        color: Colors.red,
+                                        icon: Icon(
+                                          Icons.list,
+                                          color: Colors.white,
+                                        ), //`Icon` to display
+                                        label: Text(
+                                          'Attendance',
+                                          style: TextStyle(color: Colors.white),
+                                        ), //`Text` to display
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(40)),
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                              return Attendance(
+                                                  widget.id,
                                                   widget.eventName,
-                                                  style: TextStyle(
-                                                    fontSize: 24.0,
-                                                  ),
-                                                ),
-                                              ),
-                                              Text(
-                                                widget.date,
-                                              ),
-                                            ]),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8.0),
-                                            child: RaisedButton.icon(
-                                                color: Colors.red,
-                                                icon: Icon(
-                                                  Icons.list,
-                                                  color: Colors.white,
-                                                ), //`Icon` to display
-                                                label: Text(
-                                                  'Attendance',
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ), //`Text` to display
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            40)),
-                                                onPressed: () {
-                                                  Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) {
-                                                      return Attendance(
-                                                          widget.id,
-                                                          widget.eventName,
-                                                          widget.registered);
-                                                    }),
-                                                  );
-                                                }),
-                                          ),
-                                        ],
-                                      ),
-                                    ]),
+                                                  widget.registered);
+                                            }),
+                                          );
+                                        }),
+                                  ],
+                                ),
                                 _getExpandable(
                                     "Description", widget.description),
                                 _getLine(),

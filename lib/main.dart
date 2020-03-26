@@ -15,7 +15,7 @@ void main() {
       theme: ThemeData(
           primaryColor: Colors.blue[300],
           accentColor: Colors.red,
-          fontFamily: 'Montserrat'),
+          fontFamily: 'GoogleSans'),
       home: Home(),
       debugShowCheckedModeBanner: false,
     ),

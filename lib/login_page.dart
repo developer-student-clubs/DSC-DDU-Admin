@@ -34,11 +34,16 @@ class MainPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(
-              'assets/main_logo.png',
-              fit: BoxFit.fitWidth,
+            Image(
+              image: AssetImage('assets/gd_dsc_lockup_vertical_color.png'),
+              height: 90.0,
             ),
-            SizedBox(height: 90),
+            Text("Dharmsinh Desai University",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color.fromRGBO(104, 104, 104, 1),
+                )),
+            SizedBox(height: 120),
             _signInButton(context),
           ],
         ),

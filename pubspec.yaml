@@ -45,6 +45,7 @@ flutter:
     - assets/
     
   fonts:
-     - family: Montserrat
+     - family: GoogleSans
        fonts:
-         - asset: fonts/Montserrat-Regular.ttf
+         - asset: fonts/GoogleSans-Regular-v1.27.ttf
+     
