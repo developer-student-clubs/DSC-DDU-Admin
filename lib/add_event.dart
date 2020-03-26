@@ -26,7 +26,7 @@ class AddEventState extends State<AddEvent> {
   final dateformat = DateFormat("dd MMMM yyyy");
   final timeformat = DateFormat.jm();
   String _startTime;
-  String _endTime;
+  String _endTime = "onwards";
 
   @override
   Widget build(BuildContext context) {
@@ -136,12 +136,9 @@ class AddEventState extends State<AddEvent> {
                             return DateTimeField.convert(time);
                           },
                           onSaved: (DateTime value) {
-                            this._endTime = timeformat.format(value);
-                          },
-                          validator: (value) {
-                            return (value == null)
-                                ? 'End time cannot be empty'
-                                : null;
+                            if (value != null) {
+                              this._endTime = timeformat.format(value);
+                            }
                           },
                         ), //end time
                         TextFormField(
@@ -289,7 +286,9 @@ class AddEventState extends State<AddEvent> {
                             if (formkey.currentState.validate()) {
                               formkey.currentState.save();
                               if (_image != null) {
-                                event.timings = _startTime + " to " + _endTime;
+                                event.timings = (_endTime == "onwards")
+                                    ? _startTime + " " + _endTime
+                                    : _startTime + " to " + _endTime;
                                 uploadPic(context).then((value) {
                                   if (formkey.currentState.validate()) {
                                     Firestore.instance

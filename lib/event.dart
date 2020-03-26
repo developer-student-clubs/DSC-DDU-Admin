@@ -62,7 +62,7 @@ class Event extends StatefulWidget {
         assert(map['venue'] != null),
         assert(map['what_to_bring'] != null),
         branch = map['branch'],
-        currentAvailable = map['currentAvailable'],
+        currentAvailable = map['currentAvailable'].toInt(),
         date = map['date'],
         description = map['description'],
         eventName = map['eventName'],
@@ -71,7 +71,7 @@ class Event extends StatefulWidget {
         postedOn = map['postedOn'],
         semester = map['semester'],
         timings = map['timings'],
-        totalSeats = map['totalSeats'],
+        totalSeats = int.parse(map['totalSeats'].toString()),
         venue = map['venue'],
         what_to_bring = map['what_to_bring'],
         id = reference.documentID;
@@ -89,16 +89,6 @@ class Event extends StatefulWidget {
     }());
     return fullString ?? toStringShort();
   }
-
-//  Future<int> getAttedeeCount() async{
-//    int c;
-//    await Firestore.instance.collection("events").document(id).collection("participants")
-//        .where('attended',isEqualTo:true).getDocuments().then((data){
-//          remaining= data.documents.length;
-//      c= data.documents.length;
-//    });
-//    return c;
-//  }
 
   @override
   State<StatefulWidget> createState() {

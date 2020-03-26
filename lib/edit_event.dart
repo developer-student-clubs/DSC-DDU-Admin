@@ -27,7 +27,7 @@ class EditEventState extends State<EditEvent> {
   final dateformat = DateFormat("dd MMMM yyyy");
   final timeformat = DateFormat.jm();
   String _startTime;
-  String _endTime;
+  String _endTime = "onwards";
 
   @override
   Widget build(BuildContext context) {
@@ -126,12 +126,9 @@ class EditEventState extends State<EditEvent> {
                             return DateTimeField.convert(time);
                           },
                           onSaved: (DateTime value) {
-                            this._endTime = timeformat.format(value);
-                          },
-                          validator: (value) {
-                            return (value == null)
-                                ? 'End time cannot be empty'
-                                : null;
+                            if (value != null) {
+                              this._endTime = timeformat.format(value);
+                            }
                           },
                         ), //end time
                         TextFormField(
@@ -241,34 +238,6 @@ class EditEventState extends State<EditEvent> {
                                 : null;
                           },
                         ), //semester //eventName
-                        /*Card(
-                          child: (_image != null) ? Image.file(
-                            _image,
-                            fit: BoxFit.fill,
-                          ):Image.network(
-                            widget.event.imageUrl,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        RaisedButton(
-                          color: Colors.blue,
-                          child: Text(
-                            'Upload Image',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          onPressed: () { getImage(); },
-                        ),
-                        Visibility(
-                          child: Text(
-                            '* Upload image',
-                            style: TextStyle(
-                              color: Colors.red,
-                            ),
-                          ),
-                          visible: showImageError,
-                        ),*/
                         Padding(padding: EdgeInsets.all(15.0)),
                         RaisedButton(
                           color: Colors.blue,
@@ -280,8 +249,9 @@ class EditEventState extends State<EditEvent> {
                           onPressed: () {
                             if (formkey.currentState.validate()) {
                               formkey.currentState.save();
-                              widget.event.timings =
-                                  _startTime + " to " + _endTime;
+                              widget.event.timings = (_endTime == "onwards")
+                                  ? _startTime + " " + _endTime
+                                  : _startTime + " to " + _endTime;
 
                               final DocumentReference postRef = Firestore
                                   .instance
@@ -291,30 +261,6 @@ class EditEventState extends State<EditEvent> {
                                 DocumentSnapshot postSnapshot =
                                     await tx.get(postRef);
                                 if (postSnapshot.exists) {
-                                  /*
-                                  if(_image != null) {
-                                    print("uploading pic...");
-                                    uploadPic(context).then((value) async {
-                                      print("uploaded pic");
-                                      await tx.update(postRef, <String, dynamic>{
-                                        'branch': event.branch,
-                                        'currentAvailable': event
-                                            .totalSeats,
-                                        'date': event.date,
-                                        'description': event.description,
-                                        'eventName': event.eventName,
-                                        'extraInfo': event.extraInfo,
-                                        'imageUrl': value,
-                                        'postedOn': DateTime.now(),
-                                        'semester': event.semester,
-                                        'timings': event.timings,
-                                        'totalSeats': event.totalSeats,
-                                        'venue': event.venue,
-                                        'what_to_bring': event
-                                            .what_to_bring,
-                                      });
-                                    });
-                                  } else {*/
                                   await tx.update(postRef, <String, dynamic>{
                                     'branch': widget.event.branch,
                                     'currentAvailable': widget.event.totalSeats,
@@ -329,7 +275,6 @@ class EditEventState extends State<EditEvent> {
                                     'venue': widget.event.venue,
                                     'what_to_bring': widget.event.what_to_bring,
                                   });
-                                  //}
                                 }
                               });
                               Navigator.of(context).pop(this);
@@ -341,7 +286,7 @@ class EditEventState extends State<EditEvent> {
                             "Submit",
                             style: TextStyle(fontSize: 20.0),
                           ),
-                        ) //submit
+                        )
                       ],
                     ),
                   ),
@@ -400,18 +345,30 @@ class EditEventState extends State<EditEvent> {
   }
 
   String _getStartTime(String timing) {
-    int i = timing.indexOf(" to ");
-    String startTime = timing.substring(0, i);
+    int i;
+    String startTime;
+    if (timing.indexOf("onwards") >= 0) {
+      i = timing.indexOf(" onwards");
+    } else {
+      i = timing.indexOf(" to ");
+    }
+    startTime = timing.substring(0, i);
     return startTime;
   }
 
   String _getEndTime(String timing) {
+    if (timing.indexOf("onwards") >= 0) {
+      return "onwards";
+    }
     int i = timing.indexOf(" to ");
-    String startTime = timing.substring(i + 4, timing.length);
-    return startTime;
+    String endTime = timing.substring(i + 4, timing.length);
+    return endTime;
   }
 
   DateTime _getTime(String time) {
+    if (time == "onwards") {
+      return null;
+    }
     int i = time.indexOf(":");
     int j = time.indexOf(" ");
     int hour = int.parse(time.substring(0, i));
