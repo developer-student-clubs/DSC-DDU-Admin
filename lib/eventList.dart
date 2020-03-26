@@ -7,7 +7,7 @@ class EventList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('events').snapshots(),
+      stream: Firestore.instance.collection('events').orderBy('postedOn',descending:true).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return Center(

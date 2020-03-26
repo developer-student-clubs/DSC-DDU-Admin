@@ -325,13 +325,14 @@ class AddEventState extends State<AddEvent> {
                                       ? showImageError = true
                                       : showImageError = false;
                                 });
+				 pr.dismiss();
                               }
                             } else {
                               _autoValidate = true;
                               
                             }
                         
-                            pr.hide();
+                           
                           
                           },
                           child: Text(
