@@ -83,8 +83,6 @@ class EditEventState extends State<EditEvent>
                             final now = DateTime.now();
                             if (value == null) {
                               return 'Date cannot be empty';
-                            } else if (value.compareTo(new DateTime(now.year, now.month, now.day)) < 0) {
-                              return 'Date cannot be less than today';
                             } else {
                               return null;
                             }
