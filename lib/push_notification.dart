@@ -1,13 +1,11 @@
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dsc_event_adder/event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:intl/intl.dart';
+
 
 class AddNotification extends StatefulWidget
 {
@@ -102,8 +100,8 @@ class AddNotificationState extends State<AddNotification>
                           child: (_image != null) ? Image.file(
                             _image,
                             fit: BoxFit.fill,
-                          ):Image.network(
-                            "https://winaero.com/blog/wp-content/uploads/2019/11/Photos-new-icon.png",
+                          ):Image.asset(
+                            'assets/new_image.png',
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -151,13 +149,14 @@ class AddNotificationState extends State<AddNotification>
                                     Navigator.of(context).pop(this);
                                   }
                                 });
-                              }else{
+                              }
+                              else{
                                 if (formkey.currentState.validate()){
                                   Firestore.instance.collection('notifications').document()
                                       .setData({
                                     'body': body,
                                     'title':title,
-                                    'imageUrl':imageUrl,
+                                    'imageUrl':this.imageUrl,
 
                                   });
                                   Navigator.of(context).pop(this);
