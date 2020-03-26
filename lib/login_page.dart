@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dsc_event_adder/sign_in.dart';
 import 'package:dsc_event_adder/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 bool canEdit = false;
 bool canGetList = false;
@@ -52,9 +53,13 @@ class MainPage extends StatelessWidget {
   }
 
   Widget _signInButton(BuildContext context) {
+   
     return OutlineButton(
       splashColor: Colors.grey,
       onPressed: () {
+        ProgressDialog pr= new ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+        pr.style(message: "Please Wait....");
+        pr.show();
         signInWithGoogle().whenComplete(() {
           Firestore.instance
               .collection('extra_access_users')
@@ -73,6 +78,7 @@ class MainPage extends StatelessWidget {
               canLive = qs.documents[0].data['can_live'];
               canScan = qs.documents[0].data['can_scan'];
               canNotify = qs.documents[0].data['can_notify'];
+              pr.dismiss();
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) {
                 return Home();
