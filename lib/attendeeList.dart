@@ -51,7 +51,8 @@ void getAttendeeList(BuildContext context, String id, String name) {
     // await SimplePermissions.requestPermission(Permission.WriteExternalStorage);
     // bool checkPermission=await SimplePermissions.checkPermission(Permission.WriteExternalStorage);
     // if(checkPermission) {
-    String dir = (await getExternalStorageDirectory()).absolute.path + "/";
+    //String dir = (await getExternalStorageDirectory()).absolute.path + "/";
+    String dir = (await DefaultPathProvider.getDocumentsDirectoryPath)+ "/";
     String file = "$dir";
     File f = new File(file + name + ".csv");
     String csv = const ListToCsvConverter().convert(rows);
@@ -66,6 +67,7 @@ void getAttendeeList(BuildContext context, String id, String name) {
         onPressed: () {
           OpenFile.open(
             file + name + ".csv",
+            type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           );
         },
       ),
