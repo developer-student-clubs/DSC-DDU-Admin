@@ -13,8 +13,8 @@ void main() {
   runApp(
     MaterialApp(
       theme: ThemeData(
-          primaryColor: Colors.blue[300],
-          accentColor: Colors.red,
+          primaryColor: Color.fromRGBO(66, 133, 244, 1),
+          accentColor: Color.fromRGBO(219, 68, 55, 1),
           fontFamily: 'GoogleSans'),
       home: Home(),
       debugShowCheckedModeBanner: false,
@@ -85,12 +85,9 @@ class HomeState extends State<Home> {
             child: const Text('Event Manager'),
           ),
           actions: <Widget>[
+            _getSendNotificationBtn(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: _getSendNotificationBtn(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.only(right: 8.0),
               child: _getSignOutIcon(),
             ),
           ],
@@ -145,7 +142,7 @@ class HomeState extends State<Home> {
           }
           return showDialog<ConfirmAction>(
             context: context,
-            barrierDismissible: false, // user must tap button for close dialog!
+            barrierDismissible: false, // user must tap button to close dialog
             builder: (BuildContext context) {
               return AlertDialog(
                 title: Text('Sign Out'),

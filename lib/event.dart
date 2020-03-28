@@ -189,7 +189,7 @@ class EventState extends State<Event> {
                                       ],
                                     ),
                                     RaisedButton.icon(
-                                        color: Colors.red,
+                                        color: Theme.of(context).accentColor,
                                         icon: Icon(
                                           Icons.list,
                                           color: Colors.white,
@@ -231,14 +231,14 @@ class EventState extends State<Event> {
                                         ),
                                         getPill(
                                             widget.currentAvailable.toString(),
-                                            Colors.green[100]),
+                                            Color.fromRGBO(15, 157, 88, 0.3)),
                                         Text(
                                           ' / ',
                                           style: TextStyle(
                                               fontSize: 20, color: Colors.grey),
                                         ),
                                         getPill(widget.totalSeats.toString(),
-                                            Colors.blue[100]),
+                                            Color.fromRGBO(66, 133, 244, 0.3)),
                                       ],
                                     )),
                                 _getLine(),
@@ -254,8 +254,8 @@ class EventState extends State<Event> {
                                         SizedBox(
                                           width: 50,
                                         ),
-                                        getPill(
-                                            widget.timings, Colors.yellow[100]),
+                                        getPill(widget.timings,
+                                            Color.fromRGBO(244, 160, 0, 0.3)),
                                       ],
                                     )),
                                 _getLine(),

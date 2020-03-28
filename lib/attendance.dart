@@ -75,108 +75,153 @@ class MainPage extends StatelessWidget {
     this.remaining = remaining;
     this.name = name;
   }
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        "Present" + ": ",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 24,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+              child: Container(
+                color: Colors.white,
+                child: ListView(
+                  children: <Widget>[
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        _getCountBox("Present", remaining),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 64.0),
+                          child: Container(
+                            color: Colors.grey[300],
+                            width: 2,
+                            height: 80,
+                          ),
                         ),
-                      ),
-                      Text(
-                        remaining.toString(),
-                        style: TextStyle(
-                          fontSize: 24,
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        "Registered" + ": ",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 24,
-                        ),
-                      ),
-                      Text(
-                        registered.toString(),
-                        style: TextStyle(
-                          fontSize: 24,
-                        ),
-                      )
-                    ],
-                  ),
-                ],
+                        _getCountBox("Remaining", registered),
+                      ],
+                    ),
+                    _getButtons(context),
+                  ],
+                ),
               ),
             ),
-            SizedBox(
-              height: 64.0,
-            ),
-            RaisedButton.icon(
-              color: Colors.red,
-              icon: Icon(
-                Icons.center_focus_weak,
-                color: Colors.white,
-              ), //`Icon` to display
-              label: Text(
-                'Scan QR Code',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ), //`Text` to display
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40)),
-              onPressed: () async {
-                if (canScan) {
-                  await scan(id, context);
-                } else {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text("You don't have access to scan.")));
-                }
-              },
-            ),
-            SizedBox(
-              height: 64.0,
-            ),
-            RaisedButton.icon(
-              color: Colors.red,
-              icon: Icon(
-                Icons.list,
-                color: Colors.white,
-              ), //`Icon` to display
-              label: Text(
-                'Get List',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ), //`Text` to display
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40)),
-              onPressed: () {
-                if (canGetList) {
-                  getAttendeeList(context, id, name);
-                } else {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text("You don't have access to get list.")));
-                }
-              },
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _getCountBox(String heading, int count) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 32.0, left: 32.0, right: 32.0),
+      child: Column(
+        children: <Widget>[
+          Text(
+            heading.toUpperCase(),
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 24,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+            child: Text(
+              count.toString(),
+              style: TextStyle(
+                fontSize: 64,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _getButtons(BuildContext context) {
+    return (MediaQuery.of(context).orientation == Orientation.portrait)
+        ? Column(
+            children: <Widget>[
+              SizedBox(
+                height: 160,
+              ),
+              _getScanButton(context),
+              SizedBox(
+                height: 16,
+              ),
+              _getListButton(context),
+            ],
+          )
+        : Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _getScanButton(context),
+                SizedBox(
+                  width: 32,
+                ),
+                _getListButton(context),
+              ],
+            ),
+          );
+  }
+
+  Widget _getScanButton(BuildContext context) {
+    return RaisedButton.icon(
+      color: Theme.of(context).accentColor,
+      icon: Icon(
+        Icons.center_focus_weak,
+        color: Colors.white,
+      ), //`Icon` to display
+      label: Text(
+        'Scan QR Code',
+        style: TextStyle(color: Colors.white, fontSize: 20),
+      ), //`Text` to display
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      onPressed: () async {
+        if (canScan) {
+          await scan(id, context);
+        } else {
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text(
+              "You don't have access to scan.",
+            ),
+          ));
+        }
+      },
+    );
+  }
+
+  Widget _getListButton(BuildContext context) {
+    return RaisedButton.icon(
+      color: Theme.of(context).accentColor,
+      icon: Icon(
+        Icons.list,
+        color: Colors.white,
+      ), //`Icon` to display
+      label: Text(
+        'Get List',
+        style: TextStyle(color: Colors.white, fontSize: 20),
+      ), //`Text` to display
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      onPressed: () {
+        if (canGetList) {
+          getAttendeeList(context, id, name);
+        } else {
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text(
+              "You don't have access to get list.",
+            ),
+          ));
+        }
+      },
     );
   }
 }
