@@ -6,23 +6,33 @@ import 'package:flutter/material.dart';
 // import 'package:simple_permissions/simple_permissions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
+import 'package:open_file/open_file.dart';
 
 void getAttendeeList(BuildContext context, String id, String name) {
-  Scaffold.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-        "Creating file..."
-      ),
-    )
-  );
-  Firestore.instance.collection("events").document(id).collection("participants")
-        .getDocuments().then((data) async {
+  Scaffold.of(context).showSnackBar(SnackBar(
+    content: Text("Creating file..."),
+  ));
+  Firestore.instance
+      .collection("events")
+      .document(id)
+      .collection("participants")
+      .getDocuments()
+      .then((data) async {
     List<DocumentSnapshot> ds = data.documents;
     List<List<dynamic>> rows = List<List<dynamic>>();
-    rows.add(["First Name","Last Name","College ID","Branch","Semester","Email ID","Phone Number","Attended"]);
+    rows.add([
+      "First Name",
+      "Last Name",
+      "College ID",
+      "Branch",
+      "Semester",
+      "Email ID",
+      "Phone Number",
+      "Attended"
+    ]);
     String email;
     print(ds.length);
-    for (int i = 0; i <ds.length; i++) {
+    for (int i = 0; i < ds.length; i++) {
       List<dynamic> row = List();
       row.add(ds[i].data["firstName"]);
       row.add(ds[i].data["lastName"]);
@@ -40,20 +50,25 @@ void getAttendeeList(BuildContext context, String id, String name) {
     // await SimplePermissions.requestPermission(Permission.WriteExternalStorage);
     // bool checkPermission=await SimplePermissions.checkPermission(Permission.WriteExternalStorage);
     // if(checkPermission) {
-        String dir = (await getExternalStorageDirectory()).absolute.path + "/";
-        String file = "$dir";
-        File f = new File(file + name + ".csv");
-        String csv = const ListToCsvConverter().convert(rows);
-        //String header = "First Name,Last Name,College ID,Branch,Semester,Email ID,Phone Number,Attended\n";
-        //await f.writeAsString(header);
-        await f.writeAsString(csv);
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              name + ".csv created at " + file
-            ),
-          )
-        );
+    String dir = (await getExternalStorageDirectory()).absolute.path + "/";
+    String file = "$dir";
+    File f = new File(file + name + ".csv");
+    String csv = const ListToCsvConverter().convert(rows);
+    //String header = "First Name,Last Name,College ID,Branch,Semester,Email ID,Phone Number,Attended\n";
+    //await f.writeAsString(header);
+    await f.writeAsString(csv);
+    Scaffold.of(context).showSnackBar(SnackBar(
+      duration: Duration(seconds: 7),
+      content: Text(name + ".csv created at " + file),
+      action: SnackBarAction(
+        label: "Open",
+        onPressed: () {
+          OpenFile.open(
+            file + name + ".csv",
+          );
+        },
+      ),
+    ));
 //    }
   });
 }

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "604189766536",
+    "firebase_url": "https://test-dsc-ddu.firebaseio.com",
+    "project_id": "test-dsc-ddu",
+    "storage_bucket": "test-dsc-ddu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604189766536:android:a7fadef3c40f449492803d",
+        "android_client_info": {
+          "package_name": "com.example.dsc_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "604189766536-k5p9le11hgvoq3ru72mip6gmbs931g9g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dsc_admin",
+            "certificate_hash": "49cbca09db518c8d950b38dbd83ac7e346ed6a47"
+          }
+        },
+        {
+          "client_id": "604189766536-3hnac63js5958v4jjj63lp4c1jjmjiqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbPXru-SQhZYy80a6MdzQCdpV11rCJMXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "604189766536-3hnac63js5958v4jjj63lp4c1jjmjiqp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

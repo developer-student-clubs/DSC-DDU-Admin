@@ -21,6 +21,7 @@ class EventList extends StatelessWidget {
   }
 
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+    snapshot.sort((a, b) => b.data["postedOn"].compareTo(a.data["postedOn"]));
     return ListView(
       padding: const EdgeInsets.only(top: 20.0),
       children: snapshot.map((data) => _buildListItem(context, data)).toList(),
@@ -31,7 +32,7 @@ class EventList extends StatelessWidget {
     final event = Event.fromSnapshot(data);
     return Padding(
         key: ValueKey(event.eventName),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
         child: GestureDetector(
           onTap: () =>
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -57,16 +58,19 @@ class EventList extends StatelessWidget {
             color: Colors.grey[50],
             child: Column(
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(5),
-                      topRight: Radius.circular(5)),
-                  child: Container(
-                    height: 150.0,
-                    width: MediaQuery.of(context).size.width - 32,
-                    child: Image.network(
-                      event.imageUrl,
-                      fit: BoxFit.cover,
+                Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(3),
+                        topRight: Radius.circular(3)),
+                    child: Container(
+                      height: 150.0,
+                      width: MediaQuery.of(context).size.width - 32,
+                      child: Image.network(
+                        event.imageUrl,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
