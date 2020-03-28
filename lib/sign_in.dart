@@ -9,7 +9,7 @@ String name;
 String email;
 String imageUrl;
 bool isSignedIn = false;
-GoogleSignInAccount googleSignInAccount = null;
+GoogleSignInAccount googleSignInAccount;
 
 Future<String> signInWithGoogle() async {
   //await googleSignIn.signOut();
