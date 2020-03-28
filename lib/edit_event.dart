@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class EditEvent extends StatefulWidget {
   Event event;
@@ -246,9 +247,12 @@ class EditEventState extends State<EditEvent> {
                           disabledTextColor: Colors.black,
                           padding: EdgeInsets.all(8.0),
                           splashColor: Colors.red,
-                          onPressed: () {
+                          onPressed: () async {
                             if (formkey.currentState.validate()) {
+                               
                               formkey.currentState.save();
+			                      
+
                               widget.event.timings = (_endTime == "onwards")
                                   ? _startTime + " " + _endTime
                                   : _startTime + " to " + _endTime;
@@ -277,10 +281,12 @@ class EditEventState extends State<EditEvent> {
                                   });
                                 }
                               });
+			
                               Navigator.of(context).pop(this);
                             } else {
                               _autoValidate = true;
                             }
+
                           },
                           child: Text(
                             "Submit",

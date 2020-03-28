@@ -409,7 +409,7 @@ class EventState extends State<Event> {
           .pushReplacement(MaterialPageRoute(builder: (context) {
         return EditEvent(widget);
       })).then((value) {
-        setState(() {});
+       
       });
     } else {
       _eventSK.currentState.showSnackBar(
