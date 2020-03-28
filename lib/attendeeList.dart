@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
 import 'package:open_file/open_file.dart';
+import 'package:default_path_provider/default_path_provider.dart';
 
 void getAttendeeList(BuildContext context, String id, String name) {
   Scaffold.of(context).showSnackBar(SnackBar(
@@ -42,7 +43,7 @@ void getAttendeeList(BuildContext context, String id, String name) {
       email = ds[i].data["qrCodeString"].toString();
       email = email.substring(0, email.length - 17);
       row.add(email);
-      row.add(ds[i].data["phoneNumber"]);
+      row.add(ds[i].data["phoneNumber"].toString());
       row.add(ds[i].data["attended"]);
       rows.add(row);
     }
