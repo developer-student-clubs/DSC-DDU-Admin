@@ -1,5 +1,4 @@
 import 'package:dsc_event_adder/attendance.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/edit_event.dart';
@@ -24,28 +23,29 @@ class Event extends StatefulWidget {
   String timings;
   int totalSeats;
   String venue;
-  String what_to_bring;
+  String whatToBring;
   int registered;
   DocumentReference reference;
 
   Event();
 
   Event.fromData(
-      this.id,
-      this.branch,
-      this.currentAvailable,
-      this.date,
-      this.description,
-      this.eventName,
-      this.extraInfo,
-      this.imageUrl,
-      this.postedOn,
-      this.semester,
-      this.timings,
-      this.totalSeats,
-      this.venue,
-      this.what_to_bring,
-      this.registered);
+    this.id,
+    this.branch,
+    this.currentAvailable,
+    this.date,
+    this.description,
+    this.eventName,
+    this.extraInfo,
+    this.imageUrl,
+    this.postedOn,
+    this.semester,
+    this.timings,
+    this.totalSeats,
+    this.venue,
+    this.whatToBring,
+    this.registered,
+  );
 
   Event.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['branch'] != null),
@@ -73,22 +73,14 @@ class Event extends StatefulWidget {
         timings = map['timings'],
         totalSeats = int.parse(map['totalSeats'].toString()),
         venue = map['venue'],
-        what_to_bring = map['what_to_bring'],
+        whatToBring = map['what_to_bring'],
         id = reference.documentID;
 
   Event.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
-    String fullString;
-    assert(() {
-      fullString = toDiagnosticsNode(style: DiagnosticsTreeStyle.singleLine)
-          .toString(minLevel: minLevel);
-      return true;
-    }());
-    return fullString ?? toStringShort();
-  }
+      : this.fromMap(
+          snapshot.data,
+          reference: snapshot.reference,
+        );
 
   @override
   State<StatefulWidget> createState() {
@@ -185,7 +177,9 @@ class EventState extends State<Event> {
                                         Text(
                                           widget.date,
                                         ),
-                                        SizedBox(height: 30.0),
+                                        SizedBox(
+                                          height: 30.0,
+                                        ),
                                       ],
                                     ),
                                     RaisedButton.icon(
@@ -196,7 +190,9 @@ class EventState extends State<Event> {
                                         ), //`Icon` to display
                                         label: Text(
                                           'Attendance',
-                                          style: TextStyle(color: Colors.white),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
                                         ), //`Text` to display
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -205,10 +201,11 @@ class EventState extends State<Event> {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) {
-                                              return Attendance(
-                                                  widget.id,
-                                                  widget.eventName,
-                                                  widget.registered);
+                                              return Attendance.fromData(
+                                                widget.id,
+                                                widget.eventName,
+                                                widget.registered,
+                                              );
                                             }),
                                           );
                                         }),
@@ -219,7 +216,8 @@ class EventState extends State<Event> {
                                 _getLine(),
                                 Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
+                                      vertical: 16,
+                                    ),
                                     child: Row(
                                       children: <Widget>[
                                         Text(
@@ -235,10 +233,14 @@ class EventState extends State<Event> {
                                         Text(
                                           ' / ',
                                           style: TextStyle(
-                                              fontSize: 20, color: Colors.grey),
+                                            fontSize: 20,
+                                            color: Colors.grey,
+                                          ),
                                         ),
-                                        getPill(widget.totalSeats.toString(),
-                                            Color.fromRGBO(66, 133, 244, 0.3)),
+                                        getPill(
+                                          widget.totalSeats.toString(),
+                                          Color.fromRGBO(66, 133, 244, 0.3),
+                                        ),
                                       ],
                                     )),
                                 _getLine(),
@@ -254,8 +256,10 @@ class EventState extends State<Event> {
                                         SizedBox(
                                           width: 50,
                                         ),
-                                        getPill(widget.timings,
-                                            Color.fromRGBO(244, 160, 0, 0.3)),
+                                        getPill(
+                                          widget.timings,
+                                          Color.fromRGBO(244, 160, 0, 0.3),
+                                        ),
                                       ],
                                     )),
                                 _getLine(),
@@ -265,17 +269,28 @@ class EventState extends State<Event> {
                                   child: Column(
                                     children: <Widget>[
                                       getTextLabelAndValue(
-                                          "Venue", widget.venue),
+                                        "Venue",
+                                        widget.venue,
+                                      ),
                                       getTextLabelAndValue(
-                                          "Branch", widget.branch),
+                                        "Branch",
+                                        widget.branch,
+                                      ),
                                       getTextLabelAndValue(
-                                          "Semester", widget.semester),
+                                        "Semester",
+                                        widget.semester,
+                                      ),
                                     ],
                                   ),
                                 ),
                                 _getExpandable(
-                                    "What to Bring", widget.what_to_bring),
-                                _getExpandable("Extra", widget.extraInfo),
+                                  "What to Bring",
+                                  widget.whatToBring,
+                                ),
+                                _getExpandable(
+                                  "Extra",
+                                  widget.extraInfo,
+                                ),
                                 SizedBox(
                                   height: 70,
                                 ),
@@ -408,9 +423,7 @@ class EventState extends State<Event> {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
         return EditEvent(widget);
-      })).then((value) {
-       
-      });
+      })).then((value) {});
     } else {
       _eventSK.currentState.showSnackBar(
           SnackBar(content: Text("You don't have access to edit an event.")));

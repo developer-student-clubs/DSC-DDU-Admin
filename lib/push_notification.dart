@@ -7,17 +7,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-
-class AddNotification extends StatefulWidget
-{
+class AddNotification extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return AddNotificationState();
   }
 }
 
-class AddNotificationState extends State<AddNotification>
-{
+class AddNotificationState extends State<AddNotification> {
   File _image;
 
   final formkey = GlobalKey<FormState>();
@@ -29,7 +26,6 @@ class AddNotificationState extends State<AddNotification>
   String imageUrl;
   @override
   Widget build(BuildContext context) {
-
     Future getImage() async {
       var image = await ImagePicker.pickImage(source: ImageSource.gallery);
       setState(() {
@@ -38,9 +34,10 @@ class AddNotificationState extends State<AddNotification>
       });
     }
 
-    Future<String> uploadPic(BuildContext context) async{
+    Future<String> uploadPic(BuildContext context) async {
       String fileName = basename(_image.path);
-      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
+      StorageReference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child(fileName);
       StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
       StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
@@ -48,73 +45,88 @@ class AddNotificationState extends State<AddNotification>
     }
 
     return new Scaffold(
-      body:new Container(
+      body: new Container(
         color: Colors.grey[300],
         child: Center(
-          child:new Card(
+          child: new Card(
               color: Colors.white,
               margin: EdgeInsets.all(10.0),
               child: Form(
                 key: formkey,
                 autovalidate: _autoValidate,
-                child:Padding(
+                child: Padding(
                   padding: EdgeInsets.all(15.0),
-                  child: SingleChildScrollView (
+                  child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
                         TextFormField(
                           decoration: new InputDecoration(
                               hintText: 'Enter Title Here..',
-                              labelText: 'Title'
-                          ),
+                              labelText: 'Title'),
                           onSaved: (String value) {
                             this.title = value;
                           },
                           validator: (value) {
-                            return value.isEmpty ? 'Title cannot be empty' : null;
+                            return value.isEmpty
+                                ? 'Title cannot be empty'
+                                : null;
                           },
                         ), //eventName
                         TextFormField(
                           decoration: new InputDecoration(
-                              hintText: 'Enter Body Here..',
-                              labelText: 'Body'
-                          ),
+                              hintText: 'Enter Body Here..', labelText: 'Body'),
                           onSaved: (String value) {
                             this.body = value;
                           },
                           validator: (value) {
-                            return value.isEmpty ? 'Total seats cannot be empty' : null;
+                            return value.isEmpty
+                                ? 'Total seats cannot be empty'
+                                : null;
                           },
                         ),
                         TextFormField(
                           decoration: new InputDecoration(
                               hintText: 'enter Image Url or Upload Image..',
-                              labelText: 'ImageUrl'
-                          ),
+                              labelText: 'ImageUrl'),
                           onSaved: (String value) {
                             this.imageUrl = value;
                           },
                         ),
-                        SizedBox(height: 10,),
-                        Text('or',style: TextStyle(fontSize: 20,color: Colors.grey),),
-                        Card(
-                          child: (_image != null) ? Image.file(
-                            _image,
-                            fit: BoxFit.fill,
-                          ):Image.asset(
-                            'assets/new_image.png',
-                            fit: BoxFit.fill,
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'or',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.grey,
                           ),
                         ),
+                        Card(
+                          child: (_image != null)
+                              ? Image.file(
+                                  _image,
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.asset(
+                                  'assets/new_image.png',
+                                  fit: BoxFit.fill,
+                                ),
+                        ),
                         RaisedButton(
-                          color: Colors.blue,
+                          color: Theme.of(context).primaryColor,
+                          splashColor: Theme.of(context).accentColor,
+                          disabledTextColor: Colors.black,
+                          disabledColor: Colors.grey,
                           child: Text(
                             'Upload Image',
                             style: TextStyle(
                               color: Colors.white,
                             ),
                           ),
-                          onPressed: () { getImage(); },
+                          onPressed: () {
+                            getImage();
+                          },
                         ),
                         Visibility(
                           child: Text(
@@ -134,34 +146,38 @@ class AddNotificationState extends State<AddNotification>
                           padding: EdgeInsets.all(8.0),
                           splashColor: Colors.red,
                           onPressed: () {
-                             ProgressDialog pr= new ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
-                             pr.style(message: "Please Wait....");
-                             pr.show();
-                            if(formkey.currentState.validate()) {
+                            ProgressDialog pr = new ProgressDialog(context,
+                                type: ProgressDialogType.Normal,
+                                isDismissible: false,
+                                showLogs: false);
+                            pr.style(message: "Please Wait....");
+                            pr.show();
+                            if (formkey.currentState.validate()) {
                               formkey.currentState.save();
-                              if(_image != null) {
-                                uploadPic(context).then((value){
-                                  imageUrl=value;
-                                  if (formkey.currentState.validate()){
-                                    Firestore.instance.collection('notifications').document()
+                              if (_image != null) {
+                                uploadPic(context).then((value) {
+                                  imageUrl = value;
+                                  if (formkey.currentState.validate()) {
+                                    Firestore.instance
+                                        .collection('notifications')
+                                        .document()
                                         .setData({
                                       'body': body,
-                                      'title':title,
-                                      'imageUrl':value,
-
+                                      'title': title,
+                                      'imageUrl': value,
                                     });
                                     Navigator.of(context).pop(this);
                                   }
                                 });
-                              }
-                              else{
-                                if (formkey.currentState.validate()){
-                                  Firestore.instance.collection('notifications').document()
+                              } else {
+                                if (formkey.currentState.validate()) {
+                                  Firestore.instance
+                                      .collection('notifications')
+                                      .document()
                                       .setData({
                                     'body': body,
-                                    'title':title,
-                                    'imageUrl':this.imageUrl,
-
+                                    'title': title,
+                                    'imageUrl': this.imageUrl,
                                   });
                                   Navigator.of(context).pop(this);
                                 }
@@ -180,8 +196,7 @@ class AddNotificationState extends State<AddNotification>
                     ),
                   ),
                 ),
-              )
-          ),
+              )),
         ),
       ),
     );

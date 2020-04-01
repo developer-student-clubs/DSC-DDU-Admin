@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:dsc_event_adder/sign_in.dart';
 import 'package:dsc_event_adder/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 bool canEdit = false;
 bool canGetList = false;

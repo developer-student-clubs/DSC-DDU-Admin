@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:simple_permissions/simple_permissions.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
 import 'package:open_file/open_file.dart';
 import 'package:default_path_provider/default_path_provider.dart';
@@ -32,7 +30,6 @@ void getAttendeeList(BuildContext context, String id, String name) {
       "Attended"
     ]);
     String email;
-    print(ds.length);
     for (int i = 0; i < ds.length; i++) {
       List<dynamic> row = List();
       row.add(ds[i].data["firstName"]);
@@ -51,8 +48,7 @@ void getAttendeeList(BuildContext context, String id, String name) {
     // await SimplePermissions.requestPermission(Permission.WriteExternalStorage);
     // bool checkPermission=await SimplePermissions.checkPermission(Permission.WriteExternalStorage);
     // if(checkPermission) {
-    //String dir = (await getExternalStorageDirectory()).absolute.path + "/";
-    String dir = (await DefaultPathProvider.getDocumentsDirectoryPath)+ "/";
+    String dir = (await DefaultPathProvider.getDocumentsDirectoryPath) + "/";
     String file = "$dir";
     File f = new File(file + name + ".csv");
     String csv = const ListToCsvConverter().convert(rows);
@@ -67,7 +63,8 @@ void getAttendeeList(BuildContext context, String id, String name) {
         onPressed: () {
           OpenFile.open(
             file + name + ".csv",
-            type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            type:
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
           );
         },
       ),
