@@ -25,6 +25,7 @@ dependencies:
   progress_dialog: ^1.2.1
   open_file: ^3.0.1
   default_path_provider: ^0.1.0
+  cached_network_image: ^2.0.0
   
 dev_dependencies:
   flutter_test:

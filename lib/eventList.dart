@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/event.dart';
 import 'package:flutter/rendering.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class EventList extends StatelessWidget {
   @override
@@ -70,9 +71,25 @@ class EventList extends StatelessWidget {
                     child: Container(
                       height: 150.0,
                       width: MediaQuery.of(context).size.width - 32,
-                      child: Image.network(
-                        event.imageUrl,
-                        fit: BoxFit.cover,
+                      child: Hero(
+                        tag: event.eventName,
+                        child: CachedNetworkImage(
+                        imageUrl: event.imageUrl,
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.cyan[50],
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                       ),
                     ),
                   ),

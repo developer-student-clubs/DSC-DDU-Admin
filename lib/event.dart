@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dsc_event_adder/attendance.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -147,9 +148,27 @@ class EventState extends State<Event> {
                             child: ClipRRect(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(25)),
-                              child: Image.network(
-                                widget.imageUrl,
-                                fit: BoxFit.cover,
+                              child: Hero(
+                                tag: widget.eventName,
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.imageUrl,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  placeholder: (context, url) => Center(
+                                    child: CircularProgressIndicator(
+                                      backgroundColor: Colors.cyan[50],
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
                               ),
                             ),
                           ),
