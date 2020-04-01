@@ -208,7 +208,7 @@ class AddEventState extends State<AddEvent> {
                               hintText: 'things to bring here..',
                               labelText: 'Things to bring'),
                           onSaved: (String value) {
-                            this.event.what_to_bring = value;
+                            this.event.whatToBring = value;
                           },
                           validator: (value) {
                             return value.isEmpty
@@ -277,24 +277,26 @@ class AddEventState extends State<AddEvent> {
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
                         RaisedButton(
-                          color: Colors.blue,
+                          color: Theme.of(context).primaryColor,
                           textColor: Colors.white,
                           disabledColor: Colors.grey,
                           disabledTextColor: Colors.black,
                           padding: EdgeInsets.all(8.0),
-                          splashColor: Colors.red,
+                          splashColor: Theme.of(context).accentColor,
                           onPressed: () {
-                             
                             if (formkey.currentState.validate()) {
                               formkey.currentState.save();
-                            ProgressDialog pr= new ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: true, showLogs: false);
-                             pr.style(message: "Please Wait....");
-                             pr.show();
+                              ProgressDialog pr = new ProgressDialog(context,
+                                  type: ProgressDialogType.Normal,
+                                  isDismissible: true,
+                                  showLogs: false);
+                              pr.style(message: "Please Wait....");
+                              pr.show();
                               if (_image != null) {
                                 event.timings = (_endTime == "onwards")
                                     ? _startTime + " " + _endTime
                                     : _startTime + " to " + _endTime;
-                                    
+
                                 uploadPic(context).then((value) {
                                   if (formkey.currentState.validate()) {
                                     Firestore.instance
@@ -313,7 +315,7 @@ class AddEventState extends State<AddEvent> {
                                       'timings': event.timings,
                                       'totalSeats': event.totalSeats,
                                       'venue': event.venue,
-                                      'what_to_bring': event.what_to_bring,
+                                      'what_to_bring': event.whatToBring,
                                     });
                                     pr.dismiss();
                                     Navigator.of(context).pop(this);
@@ -325,15 +327,11 @@ class AddEventState extends State<AddEvent> {
                                       ? showImageError = true
                                       : showImageError = false;
                                 });
-				 pr.dismiss();
+                                pr.dismiss();
                               }
                             } else {
                               _autoValidate = true;
-                              
                             }
-                        
-                           
-                          
                           },
                           child: Text(
                             "Submit",

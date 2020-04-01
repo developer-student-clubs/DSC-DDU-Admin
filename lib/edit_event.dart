@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 class EditEvent extends StatefulWidget {
   Event event;
@@ -199,12 +198,12 @@ class EditEventState extends State<EditEvent> {
                         TextFormField(
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
-                          initialValue: widget.event.what_to_bring, //"N.A.",
+                          initialValue: widget.event.whatToBring, //"N.A.",
                           decoration: new InputDecoration(
                               hintText: 'things to bring here..',
                               labelText: 'Things to bring'),
                           onSaved: (String value) {
-                            widget.event.what_to_bring = value;
+                            widget.event.whatToBring = value;
                           },
                           validator: (value) {
                             return value.isEmpty
@@ -239,19 +238,19 @@ class EditEventState extends State<EditEvent> {
                                 : null;
                           },
                         ), //semester //eventName
-                        Padding(padding: EdgeInsets.all(15.0)),
+                        Padding(
+                          padding: EdgeInsets.all(15.0),
+                        ),
                         RaisedButton(
-                          color: Colors.blue,
+                          color: Theme.of(context).primaryColor,
                           textColor: Colors.white,
                           disabledColor: Colors.grey,
                           disabledTextColor: Colors.black,
                           padding: EdgeInsets.all(8.0),
-                          splashColor: Colors.red,
+                          splashColor: Theme.of(context).accentColor,
                           onPressed: () async {
                             if (formkey.currentState.validate()) {
-                               
                               formkey.currentState.save();
-			                      
 
                               widget.event.timings = (_endTime == "onwards")
                                   ? _startTime + " " + _endTime
@@ -277,16 +276,15 @@ class EditEventState extends State<EditEvent> {
                                     'timings': widget.event.timings,
                                     'totalSeats': widget.event.totalSeats,
                                     'venue': widget.event.venue,
-                                    'what_to_bring': widget.event.what_to_bring,
+                                    'what_to_bring': widget.event.whatToBring,
                                   });
                                 }
                               });
-			
+
                               Navigator.of(context).pop(this);
                             } else {
                               _autoValidate = true;
                             }
-
                           },
                           child: Text(
                             "Submit",

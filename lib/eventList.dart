@@ -7,7 +7,10 @@ class EventList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('events').orderBy('postedOn',descending:true).snapshots(),
+      stream: Firestore.instance
+          .collection('events')
+          .orderBy('postedOn', descending: true)
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return Center(
@@ -50,7 +53,7 @@ class EventList extends StatelessWidget {
                 event.timings,
                 event.totalSeats,
                 event.venue,
-                event.what_to_bring,
+                event.whatToBring,
                 event.totalSeats - event.currentAvailable);
             return e;
           })),
