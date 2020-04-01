@@ -1,16 +1,13 @@
-# event_adder
+# DSC DDU Admin App
 
-A new Flutter application.
+## A Flutter application.
+* Add New Event Details
+* Edit or Delete Event
+* Send Notifications to users
+* QR Code scanner for Attendance of users
+* Get List of Registered users in csv file
 
-## Getting Started
+Designed & Developed by DSC DDU Android Team
+#### Website: https://www.dscddu.com
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+DSC DDU APP- https://play.google.com/store/apps/details?id=com.dscddu.dscddu
