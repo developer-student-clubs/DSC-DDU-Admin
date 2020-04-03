@@ -242,11 +242,17 @@ class EditEventState extends State<EditEvent> {
                           padding: EdgeInsets.all(15.0),
                         ),
                         RaisedButton(
-                          color: Theme.of(context).primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          color: Theme.of(context).accentColor,
                           textColor: Colors.white,
                           disabledColor: Colors.grey,
                           disabledTextColor: Colors.black,
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 10.0,
+                          ),
                           splashColor: Theme.of(context).accentColor,
                           onPressed: () async {
                             if (formkey.currentState.validate()) {
@@ -290,7 +296,10 @@ class EditEventState extends State<EditEvent> {
                             "Submit",
                             style: TextStyle(fontSize: 20.0),
                           ),
-                        )
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
                       ],
                     ),
                   ),

@@ -155,6 +155,7 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               CircularProgressIndicator(
                 backgroundColor: Theme.of(context).primaryColor,
+                strokeWidth: 2,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),

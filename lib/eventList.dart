@@ -16,7 +16,8 @@ class EventList extends StatelessWidget {
         if (!snapshot.hasData)
           return Center(
             child: CircularProgressIndicator(
-              backgroundColor: Colors.cyan[50],
+              strokeWidth: 2,
+              backgroundColor: Theme.of(context).primaryColor,
             ),
           );
         return _buildList(context, snapshot.data.documents);
@@ -59,6 +60,7 @@ class EventList extends StatelessWidget {
             return e;
           })),
           child: Card(
+            elevation: 2,
             color: Colors.grey[50],
             child: Column(
               children: <Widget>[
@@ -68,28 +70,31 @@ class EventList extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(3),
                         topRight: Radius.circular(3)),
+                    // borderRadius: BorderRadius.all(Radius.circular(25)),
                     child: Container(
                       height: 150.0,
                       width: MediaQuery.of(context).size.width - 32,
                       child: Hero(
                         tag: event.eventName,
                         child: CachedNetworkImage(
-                        imageUrl: event.imageUrl,
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
+                          imageUrl: event.imageUrl,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        placeholder: (context, url) => Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.cyan[50],
+                          placeholder: (context, url) => Padding(
+                            padding: const EdgeInsets.only(top: 148.0),
+                            child: LinearProgressIndicator(
+                              backgroundColor: Theme.of(context).primaryColor,
+                            ),
                           ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                         ),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                      ),
                       ),
                     ),
                   ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dsc_event_adder/add_event.dart';
 import 'package:dsc_event_adder/push_notification.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,8 @@ import 'package:dsc_event_adder/eventList.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 enum ConfirmAction { CANCEL, ACCEPT }
+
+GlobalKey<ScaffoldState> _mainSK;
 
 void main() {
   runApp(
@@ -72,55 +76,106 @@ class HomeState extends State<Home> {
     });
   }
 
+  DateTime currentBackPressTime;
+
+  Future<bool> onWillPop(BuildContext context) {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      _mainSK.currentState.showSnackBar(
+        SnackBar(
+          content: Text(
+            "Press again to exit.",
+          ),
+        ),
+      );
+      showDialog<ConfirmAction>(
+        context: context,
+        barrierDismissible: false, // user must tap button to close dialog
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Exit App'),
+            content: const Text('Are you sure you want exit?'),
+            actions: <Widget>[
+              FlatButton(
+                child: const Text('No'),
+                onPressed: () {
+                  Navigator.of(context).pop(ConfirmAction.CANCEL);
+                },
+              ),
+              FlatButton(
+                child: const Text('Yes'),
+                onPressed: () {
+                  exit(0);
+                },
+              )
+            ],
+          );
+        },
+      );
+      return Future.value(false);
+    }
+    exit(0);
+    return Future.value(true);
+  }
+
   @override
   Widget build(BuildContext context) {
+    _mainSK = new GlobalKey<ScaffoldState>();
     if (isSignedIn) {
-      return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(
-          title: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: const Text('Event Manager'),
-          ),
-          actions: <Widget>[
-            _getSendNotificationBtn(),
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: _getSignOutIcon(),
+      return WillPopScope(
+        onWillPop: () {
+          return onWillPop(context);
+        },
+        child: Scaffold(
+          key: _mainSK,
+          backgroundColor: Theme.of(context).primaryColor,
+          appBar: AppBar(
+            title: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: const Text('Event Manager'),
             ),
-          ],
-          automaticallyImplyLeading: false,
-          elevation: 0,
-        ),
-        floatingActionButton: new Builder(builder: (BuildContext context2) {
-          return new FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                if (canEdit) {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return AddEvent();
-                  }));
-                } else {
-                  Scaffold.of(context2).showSnackBar(SnackBar(
-                      content: Text("You don't have access to add events")));
-                }
-              });
-        }),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30)),
-                child: Container(
-                  color: Colors.white,
-                  child: EventList(),
+            actions: <Widget>[
+              _getSendNotificationBtn(),
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: _getSignOutIcon(),
+              ),
+            ],
+            automaticallyImplyLeading: false,
+            elevation: 0,
+          ),
+          floatingActionButton: new Builder(builder: (BuildContext context2) {
+            return new FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () {
+                  if (canEdit) {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return AddEvent();
+                    }));
+                  } else {
+                    Scaffold.of(context2).showSnackBar(SnackBar(
+                        content: Text("You don't have access to add events")));
+                  }
+                });
+          }),
+          body: Column(
+            children: <Widget>[
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30)),
+                  child: Container(
+                    color: Colors.white,
+                    child: EventList(),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     } else {

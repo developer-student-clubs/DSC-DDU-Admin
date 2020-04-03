@@ -255,7 +255,10 @@ class AddEventState extends State<AddEvent> {
                                 ),
                         ),
                         RaisedButton(
-                          color: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          color: Theme.of(context).primaryColor,
                           child: Text(
                             'Upload Image',
                             style: TextStyle(
@@ -275,13 +278,19 @@ class AddEventState extends State<AddEvent> {
                           ),
                           visible: showImageError,
                         ),
-                        Padding(padding: EdgeInsets.all(15.0)),
+                        Padding(padding: EdgeInsets.all(12.0)),
                         RaisedButton(
-                          color: Theme.of(context).primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          color: Theme.of(context).accentColor,
                           textColor: Colors.white,
                           disabledColor: Colors.grey,
                           disabledTextColor: Colors.black,
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 10.0,
+                          ),
                           splashColor: Theme.of(context).accentColor,
                           onPressed: () {
                             if (formkey.currentState.validate()) {
@@ -337,7 +346,10 @@ class AddEventState extends State<AddEvent> {
                             "Submit",
                             style: TextStyle(fontSize: 20.0),
                           ),
-                        ) //submit
+                        ),
+                        SizedBox(
+                          height: 16,
+                        )
                       ],
                     ),
                   ),

@@ -114,6 +114,9 @@ class AddNotificationState extends State<AddNotification> {
                                 ),
                         ),
                         RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40),
+                          ),
                           color: Theme.of(context).primaryColor,
                           splashColor: Theme.of(context).accentColor,
                           disabledTextColor: Colors.black,
@@ -139,11 +142,17 @@ class AddNotificationState extends State<AddNotification> {
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
                         RaisedButton(
-                          color: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          color: Theme.of(context).accentColor,
                           textColor: Colors.white,
                           disabledColor: Colors.grey,
                           disabledTextColor: Colors.black,
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 10.0,
+                          ),
                           splashColor: Colors.red,
                           onPressed: () {
                             ProgressDialog pr = new ProgressDialog(context,
@@ -191,7 +200,10 @@ class AddNotificationState extends State<AddNotification> {
                             "Submit",
                             style: TextStyle(fontSize: 20.0),
                           ),
-                        ) //submit
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
                       ],
                     ),
                   ),
