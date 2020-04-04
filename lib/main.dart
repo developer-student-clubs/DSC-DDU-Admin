@@ -129,7 +129,7 @@ class HomeState extends State<Home> {
             automaticallyImplyLeading: false,
             elevation: 0,
           ),
-          floatingActionButton: new Builder(builder: (BuildContext context2) {
+          floatingActionButton:canEdit? new Builder(builder: (BuildContext context2) {
             return new FloatingActionButton(
                 child: Icon(Icons.add),
                 onPressed: () {
@@ -143,7 +143,7 @@ class HomeState extends State<Home> {
                         content: Text("You don't have access to add events")));
                   }
                 });
-          }),
+          }):null,
           body: Column(
             children: <Widget>[
               Expanded(
