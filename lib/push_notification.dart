@@ -24,6 +24,7 @@ class AddNotificationState extends State<AddNotification> {
   String title;
   String body;
   String imageUrl;
+  String topic="";
   @override
   Widget build(BuildContext context) {
     Future getImage() async {
@@ -59,6 +60,14 @@ class AddNotificationState extends State<AddNotification> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
+                        TextFormField(
+                          decoration: new InputDecoration(
+                              hintText: 'enter the topic..',
+                              labelText: 'Topic'),
+                          onSaved: (String value) {
+                            this.topic= value;
+                          },
+                        ),
                         TextFormField(
                           decoration: new InputDecoration(
                               hintText: 'Enter Title Here..',
@@ -171,6 +180,7 @@ class AddNotificationState extends State<AddNotification> {
                                         .collection('notifications')
                                         .document()
                                         .setData({
+                                      'topic':topic,
                                       'body': body,
                                       'title': title,
                                       'imageUrl': value,
