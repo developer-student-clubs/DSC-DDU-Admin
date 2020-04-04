@@ -88,7 +88,7 @@ class Attendance extends StatelessWidget {
                               height: 80,
                             ),
                           ),
-                          _getCountBox("Remaining", registered),
+                          _getCountBox("Registered", registered),
                         ],
                       ),
                       _getButtons(context),
