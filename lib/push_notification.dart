@@ -24,7 +24,7 @@ class AddNotificationState extends State<AddNotification> {
   String title;
   String body;
   String imageUrl;
-  String topic="";
+  String topic;
   @override
   Widget build(BuildContext context) {
     Future getImage() async {
@@ -38,7 +38,7 @@ class AddNotificationState extends State<AddNotification> {
     Future<String> uploadPic(BuildContext context) async {
       String fileName = basename(_image.path);
       StorageReference firebaseStorageRef =
-          FirebaseStorage.instance.ref().child(fileName);
+          FirebaseStorage.instance.ref().child('FCMImages').child(fileName);
       StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
       StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
