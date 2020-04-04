@@ -157,7 +157,7 @@ class EventState extends State<Event> {
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image: imageProvider,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.contain,
                                       ),
                                     ),
                                   ),
