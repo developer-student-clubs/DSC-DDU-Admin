@@ -32,8 +32,6 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  final String serverToken =
-      'AAAAChH_RPM:APA91bGn9HQgQEDYB1idXmULCldISArID8OtFNu8hGEVQUB0ApBu3SD507eKHSACgkiXx5glhLK-55Q8UJggqAceMM2VnRmgT6Jk9xt05yVKXzte2FEOtalTCR0eRpMOjSjsIYu3-Tr7';
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   @override
   void initState() {
@@ -41,21 +39,6 @@ class HomeState extends State<Home> {
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: ListTile(
-              title: Text(message['notification']['title']),
-              subtitle: Text(message['notification']['body']),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");

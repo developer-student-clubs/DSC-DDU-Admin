@@ -1,6 +1,7 @@
 # DSC DDU Admin App
 
 ## A Flutter application.
+
 * Add New Event Details
 * Edit or Delete Event
 * Send Notifications to users
