@@ -88,7 +88,7 @@ class Attendance extends StatelessWidget {
                               height: 80,
                             ),
                           ),
-                          _getCountBox("Remaining", registered),
+                          _getCountBox("Registered", registered),
                         ],
                       ),
                       _getButtons(context),
@@ -159,66 +159,76 @@ class Attendance extends StatelessWidget {
   }
 
   Widget _getScanButton() {
-    return Builder(
-      builder: (BuildContext context) {
-        return RaisedButton.icon(
-          color: Theme.of(context).accentColor,
-          icon: Icon(
-            Icons.center_focus_weak,
-            color: Colors.white,
-          ), //`Icon` to display
-          label: Text(
-            'Scan QR Code',
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ), //`Text` to display
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
-          onPressed: () async {
-            if (canScan) {
-              await scan(id, context);
-            } else {
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text(
-                  "You don't have access to scan.",
-                ),
-              ));
-            }
-          },
-        );
-      },
-    );
+    if (canScan) {
+      return Builder(
+        builder: (BuildContext context) {
+          return RaisedButton.icon(
+            color: Theme.of(context).accentColor,
+            icon: Icon(
+              Icons.center_focus_weak,
+              color: Colors.white,
+            ), //`Icon` to display
+            label: Text(
+              'Scan QR Code',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ), //`Text` to display
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+            onPressed: () async {
+              if (canScan) {
+                await scan(id, context);
+              } else {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    "You don't have access to scan.",
+                  ),
+                ));
+              }
+            },
+          );
+        },
+      );
+    }
+    return Builder(builder: (BuildContext context) {
+      return Container();
+    });
   }
 
   Widget _getListButton() {
-    return Builder(
-      builder: (BuildContext context) {
-        return RaisedButton.icon(
-          color: Theme.of(context).accentColor,
-          icon: Icon(
-            Icons.list,
-            color: Colors.white,
-          ), //`Icon` to display
-          label: Text(
-            'Get List',
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ), //`Text` to display
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
-          onPressed: () {
-            if (canGetList) {
-              getAttendeeList(context, id, name);
-            } else {
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text(
-                  "You don't have access to get list.",
-                ),
-              ));
-            }
-          },
-        );
-      },
-    );
+    if (canGetList) {
+      return Builder(
+        builder: (BuildContext context) {
+          return RaisedButton.icon(
+            color: Theme.of(context).accentColor,
+            icon: Icon(
+              Icons.list,
+              color: Colors.white,
+            ), //`Icon` to display
+            label: Text(
+              'Get List',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ), //`Text` to display
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+            onPressed: () {
+              if (canGetList) {
+                getAttendeeList(context, id, name);
+              } else {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    "You don't have access to get list.",
+                  ),
+                ));
+              }
+            },
+          );
+        },
+      );
+    }
+    return Builder(builder: (BuildContext context) {
+      return Container();
+    });
   }
 }

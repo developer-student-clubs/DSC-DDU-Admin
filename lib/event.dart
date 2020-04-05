@@ -93,6 +93,19 @@ enum ActionButton { edit, delete }
 
 class EventState extends State<Event> {
   @override
+  void initState() {
+    Firestore.instance
+        .collection("events")
+        .document(widget.id)
+        .collection("participants")
+        .getDocuments()
+        .then((docs) {
+      widget.registered = docs.documents.length;
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _eventSK,
@@ -100,30 +113,32 @@ class EventState extends State<Event> {
       appBar: AppBar(
         title: Text(widget.eventName),
         elevation: 0,
-        actions: <Widget>[
-          PopupMenuButton(
-            onSelected: (ActionButton result) {
-              setState(() {
-                if (result == ActionButton.edit) {
-                  _doEdit();
-                } else {
-                  _doDelete();
-                }
-              });
-            },
-            itemBuilder: (BuildContext context) =>
-                <PopupMenuEntry<ActionButton>>[
-              const PopupMenuItem<ActionButton>(
-                value: ActionButton.edit,
-                child: Text('Edit'),
-              ),
-              const PopupMenuItem<ActionButton>(
-                value: ActionButton.delete,
-                child: Text('Delete'),
-              ),
-            ],
-          )
-        ],
+        actions: canEdit
+            ? <Widget>[
+                PopupMenuButton(
+                  onSelected: (ActionButton result) {
+                    setState(() {
+                      if (result == ActionButton.edit) {
+                        _doEdit();
+                      } else {
+                        _doDelete();
+                      }
+                    });
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<ActionButton>>[
+                    const PopupMenuItem<ActionButton>(
+                      value: ActionButton.edit,
+                      child: Text('Edit'),
+                    ),
+                    const PopupMenuItem<ActionButton>(
+                      value: ActionButton.delete,
+                      child: Text('Delete'),
+                    ),
+                  ],
+                )
+              ]
+            : null,
       ),
       body: Column(
         children: <Widget>[
@@ -157,7 +172,7 @@ class EventState extends State<Event> {
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image: imageProvider,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.contain,
                                       ),
                                     ),
                                   ),
