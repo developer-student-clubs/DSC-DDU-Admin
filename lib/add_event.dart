@@ -291,7 +291,7 @@ class AddEventState extends State<AddEvent> {
                             horizontal: 20.0,
                             vertical: 10.0,
                           ),
-                          splashColor: Theme.of(context).accentColor,
+                          splashColor: Colors.red[900],
                           onPressed: () {
                             if (formkey.currentState.validate()) {
                               formkey.currentState.save();

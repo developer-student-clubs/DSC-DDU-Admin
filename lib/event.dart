@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/edit_event.dart';
 import 'package:expandable/expandable.dart';
-import 'package:dsc_event_adder/login_page.dart';
+import 'package:dsc_event_adder/sign_in.dart';
 
 enum ConfirmAction { CANCEL, ACCEPT }
 
@@ -157,32 +157,14 @@ class EventState extends State<Event> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Container(
-                            height: 225.0,
-                            width: MediaQuery.of(context).size.width,
-                            child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(25)),
-                              child: Hero(
-                                tag: widget.eventName,
-                                child: CachedNetworkImage(
-                                  imageUrl: widget.imageUrl,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                  ),
-                                  placeholder: (context, url) => Center(
-                                    child: CircularProgressIndicator(
-                                      backgroundColor: Colors.cyan[50],
-                                    ),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            child: Hero(
+                              tag: widget.eventName + widget.date,
+                              child: Image(
+                                fit: BoxFit.fitWidth,
+                                image: CachedNetworkImageProvider(
+                                  widget.imageUrl,
                                 ),
                               ),
                             ),

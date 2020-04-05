@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/qr_scan.dart';
 import 'package:dsc_event_adder/attendeeList.dart';
-import 'package:dsc_event_adder/login_page.dart';
+import 'package:dsc_event_adder/sign_in.dart';
 
 class Attendance extends StatelessWidget {
   final String id;

@@ -75,7 +75,7 @@ class EventList extends StatelessWidget {
                       height: 150.0,
                       width: MediaQuery.of(context).size.width - 32,
                       child: Hero(
-                        tag: event.eventName,
+                        tag: event.eventName + event.date,
                         child: CachedNetworkImage(
                           imageUrl: event.imageUrl,
                           imageBuilder: (context, imageProvider) => Container(

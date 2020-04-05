@@ -153,7 +153,7 @@ class AddNotificationState extends State<AddNotification> {
                             horizontal: 20.0,
                             vertical: 10.0,
                           ),
-                          splashColor: Colors.red,
+                          splashColor: Colors.red[900],
                           onPressed: () {
                             ProgressDialog pr = new ProgressDialog(context,
                                 type: ProgressDialogType.Normal,
