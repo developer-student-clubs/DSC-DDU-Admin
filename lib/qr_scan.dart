@@ -20,16 +20,16 @@ Future<void> scan(String id, BuildContext context) async {
             'attended': true,
           });
           success = true;
-        }
-      });
 
-      if (success) {
-        Scaffold.of(context).showSnackBar(SnackBar(
+          Scaffold.of(context).showSnackBar(SnackBar(
           content: Text(
             barcode,
           ),
         ));
-      } else {
+        }
+      });
+
+      if (!success) {
         Scaffold.of(context).showSnackBar(SnackBar(
           content: Text(
             "Not Registered",
