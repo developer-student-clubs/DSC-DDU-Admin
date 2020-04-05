@@ -3,10 +3,10 @@ import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:flutter/material.dart';
 
 Future<void> scan(String id, BuildContext context) async {
-  bool success;
-  while (true) {
+    bool success;
+    success = false;
     await scanner.scan().then((barcode) async {
-      success = false;
+     
       await Firestore.instance
           .collection("events")
           .document(id)
@@ -37,5 +37,5 @@ Future<void> scan(String id, BuildContext context) async {
         ));
       }
     });
-  }
+  
 }

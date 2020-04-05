@@ -3,17 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/qr_scan.dart';
 import 'package:dsc_event_adder/attendeeList.dart';
 import 'package:dsc_event_adder/login_page.dart';
+import 'package:intl/intl.dart';
 
 class Attendance extends StatelessWidget {
   final String id;
   final int registered;
   final String name;
-
-  Attendance.fromData(
-    this.id,
-    this.name,
-    this.registered,
-  );
+  final String date;
+  Attendance.fromData(this.id, this.name, this.registered, this.date);
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +156,13 @@ class Attendance extends StatelessWidget {
   }
 
   Widget _getScanButton() {
-    if (canScan) {
+    final now = DateTime.now();
+    //.compareTo(new DateTime(now.year, now.month, now.day))
+    final dateformat = DateFormat("dd MMMM yyyy");
+    String today = dateformat.format(now);
+    bool display = today.compareTo(date) == 0;
+
+    if (canScan || display) {
       return Builder(
         builder: (BuildContext context) {
           return RaisedButton.icon(
@@ -191,7 +194,9 @@ class Attendance extends StatelessWidget {
       );
     }
     return Builder(builder: (BuildContext context) {
-      return Container();
+      return Container(
+        height: 0,
+      );
     });
   }
 
@@ -228,7 +233,9 @@ class Attendance extends StatelessWidget {
       );
     }
     return Builder(builder: (BuildContext context) {
-      return Container();
+      return Container(
+        height: 0,
+      );
     });
   }
 }

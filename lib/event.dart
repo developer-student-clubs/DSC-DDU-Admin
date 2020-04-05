@@ -233,6 +233,7 @@ class EventState extends State<Event> {
                                                 widget.id,
                                                 widget.eventName,
                                                 widget.registered,
+                                                widget.date
                                               );
                                             }),
                                           );
