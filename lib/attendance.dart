@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/qr_scan.dart';
 import 'package:dsc_event_adder/attendeeList.dart';
-<<<<<<< HEAD
 import 'package:dsc_event_adder/login_page.dart';
 import 'package:intl/intl.dart';
-=======
 import 'package:dsc_event_adder/sign_in.dart';
->>>>>>> b020d0c1d48f243857d36d4953cb25c1f16d640d
 
 class Attendance extends StatelessWidget {
   final String id;
@@ -166,7 +163,7 @@ class Attendance extends StatelessWidget {
     String today = dateformat.format(now);
     bool display = today.compareTo(date) == 0;
 
-    if (canScan || display) {
+    if (canScan && display) {
       return Builder(
         builder: (BuildContext context) {
           return RaisedButton.icon(
