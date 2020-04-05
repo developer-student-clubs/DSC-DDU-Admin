@@ -129,21 +129,24 @@ class HomeState extends State<Home> {
             automaticallyImplyLeading: false,
             elevation: 0,
           ),
-          floatingActionButton:canEdit? new Builder(builder: (BuildContext context2) {
-            return new FloatingActionButton(
-                child: Icon(Icons.add),
-                onPressed: () {
-                  if (canEdit) {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return AddEvent();
-                    }));
-                  } else {
-                    Scaffold.of(context2).showSnackBar(SnackBar(
-                        content: Text("You don't have access to add events")));
-                  }
-                });
-          }):null,
+          floatingActionButton: canEdit
+              ? new Builder(builder: (BuildContext context2) {
+                  return new FloatingActionButton(
+                      child: Icon(Icons.add),
+                      onPressed: () {
+                        if (canEdit) {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return AddEvent();
+                          }));
+                        } else {
+                          Scaffold.of(context2).showSnackBar(SnackBar(
+                              content:
+                                  Text("You don't have access to add events")));
+                        }
+                      });
+                })
+              : null,
           body: Column(
             children: <Widget>[
               Expanded(

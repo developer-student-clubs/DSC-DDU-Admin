@@ -2,13 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dsc_event_adder/sign_in.dart';
 import 'package:dsc_event_adder/main.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-bool canEdit = false;
-bool canGetList = false;
-bool canLive = false;
-bool canScan = false;
-bool canNotify = false;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -21,27 +14,14 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    signInWithGoogle().whenComplete(() {
+    signInWithGoogle().whenComplete(() async {
       if (isSignedIn) {
-        Firestore.instance
-            .collection('extra_access_users')
-            .where('email_id', isEqualTo: email)
-            .getDocuments()
-            .then((QuerySnapshot qs) {
-          if (qs.documents.length != 0) {
-            canEdit = qs.documents[0].data['can_edit'];
-            canGetList = qs.documents[0].data['can_get_list'];
-            canLive = qs.documents[0].data['can_live'];
-            canScan = qs.documents[0].data['can_scan'];
-            canNotify = qs.documents[0].data['can_notify'];
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) {
-                return Home();
-              }),
-              ModalRoute.withName('/'),
-            );
-          }
-        });
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) {
+            return Home();
+          }),
+          ModalRoute.withName('/'),
+        );
       } else {
         setState(() {
           _showLoginButton = true;
@@ -85,30 +65,18 @@ class _LoginPageState extends State<LoginPage> {
           splashColor: Colors.grey,
           onPressed: () {
             signInWithGoogle().whenComplete(() {
-              Firestore.instance
-                  .collection('extra_access_users')
-                  .where('email_id', isEqualTo: email)
-                  .getDocuments()
-                  .then((QuerySnapshot qs) {
-                if (qs.documents.length == 0) {
-                  googleSignIn.signOut();
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                      "You don't have access to this app.",
-                    ),
-                  ));
-                } else {
-                  canEdit = qs.documents[0].data['can_edit'];
-                  canGetList = qs.documents[0].data['can_get_list'];
-                  canLive = qs.documents[0].data['can_live'];
-                  canScan = qs.documents[0].data['can_scan'];
-                  canNotify = qs.documents[0].data['can_notify'];
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) {
-                    return Home();
-                  }), ModalRoute.withName('/'));
-                }
-              });
+              if (isSignedIn) {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) {
+                  return Home();
+                }), ModalRoute.withName('/'));
+              } else {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    "You don't have access to this app.",
+                  ),
+                ));
+              }
             });
           },
           shape:

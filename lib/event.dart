@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_event_adder/edit_event.dart';
 import 'package:expandable/expandable.dart';
-import 'package:dsc_event_adder/login_page.dart';
+import 'package:dsc_event_adder/sign_in.dart';
 
 enum ConfirmAction { CANCEL, ACCEPT }
 
@@ -93,14 +93,18 @@ enum ActionButton { edit, delete }
 
 class EventState extends State<Event> {
   @override
-  void initState(){
-      
-      Firestore.instance.collection("events").document(widget.id).collection("participants").getDocuments().then((docs){
-        widget.registered=docs.documents.length;
-      });
-      super.initState();
-      
+  void initState() {
+    Firestore.instance
+        .collection("events")
+        .document(widget.id)
+        .collection("participants")
+        .getDocuments()
+        .then((docs) {
+      widget.registered = docs.documents.length;
+    });
+    super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,30 +113,32 @@ class EventState extends State<Event> {
       appBar: AppBar(
         title: Text(widget.eventName),
         elevation: 0,
-        actions: canEdit? <Widget>[
-          PopupMenuButton(
-            onSelected: (ActionButton result) {
-              setState(() {
-                if (result == ActionButton.edit) {
-                  _doEdit();
-                } else {
-                  _doDelete();
-                }
-              });
-            },
-            itemBuilder:(BuildContext context) =>
-                <PopupMenuEntry<ActionButton>>[
-              const PopupMenuItem<ActionButton>(
-                value: ActionButton.edit,
-                child: Text('Edit'),
-              ),
-              const PopupMenuItem<ActionButton>(
-                value: ActionButton.delete,
-                child: Text('Delete'),
-              ),
-            ],
-          )
-        ]:null,
+        actions: canEdit
+            ? <Widget>[
+                PopupMenuButton(
+                  onSelected: (ActionButton result) {
+                    setState(() {
+                      if (result == ActionButton.edit) {
+                        _doEdit();
+                      } else {
+                        _doDelete();
+                      }
+                    });
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<ActionButton>>[
+                    const PopupMenuItem<ActionButton>(
+                      value: ActionButton.edit,
+                      child: Text('Edit'),
+                    ),
+                    const PopupMenuItem<ActionButton>(
+                      value: ActionButton.delete,
+                      child: Text('Delete'),
+                    ),
+                  ],
+                )
+              ]
+            : null,
       ),
       body: Column(
         children: <Widget>[
@@ -151,32 +157,14 @@ class EventState extends State<Event> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Container(
-                            height: 225.0,
-                            width: MediaQuery.of(context).size.width,
-                            child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(25)),
-                              child: Hero(
-                                tag: widget.eventName,
-                                child: CachedNetworkImage(
-                                  imageUrl: widget.imageUrl,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                  ),
-                                  placeholder: (context, url) => Center(
-                                    child: CircularProgressIndicator(
-                                      backgroundColor: Colors.cyan[50],
-                                    ),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            child: Hero(
+                              tag: widget.eventName + widget.date,
+                              child: Image(
+                                fit: BoxFit.fitWidth,
+                                image: CachedNetworkImageProvider(
+                                  widget.imageUrl,
                                 ),
                               ),
                             ),

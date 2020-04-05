@@ -253,7 +253,7 @@ class EditEventState extends State<EditEvent> {
                             horizontal: 20.0,
                             vertical: 10.0,
                           ),
-                          splashColor: Theme.of(context).accentColor,
+                          splashColor: Colors.red[900],
                           onPressed: () async {
                             if (formkey.currentState.validate()) {
                               formkey.currentState.save();
