@@ -1,4 +1,4 @@
-package com.example.dsc_admin
+package com.dscddu.dsc_admin
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
