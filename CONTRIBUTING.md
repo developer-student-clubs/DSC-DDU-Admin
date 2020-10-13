@@ -96,7 +96,7 @@ Please note we have a code of conduct, please follow it in all your interactions
    ```
 4. To make sure your forked repository is up to date with this repository. Add this repository as the upstream repository by doing the following:
 ```
-git remote add upstream https://github.com/sButtons/sbuttons.git
+git remote add upstream https://github.com/developer-student-clubs/DSC-DDU-Admin.git
 ```
 Then, to fetch from this repository:
 ```
