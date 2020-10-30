@@ -23,3 +23,7 @@ Designed & Developed by DSC DDU Android Team
 </p>
 
 DSC DDU APP (Not this app, The main app for this admin app.) - [PlayStore-DSCDDU](https://play.google.com/store/apps/details?id=com.dscddu.dscddu)
+
+## Contribution
+
+Please see the [contributing guidelines](./CONTRIBUTING.md) for details.
