@@ -1,6 +1,6 @@
 # Contributing
 
-If you want to add a new feature or fix any issues, be sure to follow this guideline.
+If you want to work on a new feature or fix any issues, create a detailed draft, file it as an issue, get approval from maintainers and start working on it. Be sure to follow this guideline for the same.
 
 Please note we have a code of conduct, please follow it in all your interactions with the project.
 
